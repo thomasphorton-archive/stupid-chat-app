@@ -37,7 +37,7 @@ window.onload = function() {
  
     function sendMessage() {
         if(name.value == "") {
-            alert("Please type your name!");
+            console.log("Please type your name!");
         } else {
             var text = field.value;
             socket.emit('send', { message: text, username: name.value });

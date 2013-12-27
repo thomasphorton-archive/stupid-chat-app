@@ -29,8 +29,10 @@ var io = require('socket.io').listen(app.listen(process.env.PORT || 5000));
 // });
 
 io.sockets.on('connection', function (socket) {
+    console.log('User connected');
     socket.emit('message', { message: 'welcome to the chat' });
     socket.on('send', function (data) {
+        console.log('Emitting Message');
         io.sockets.emit('message', data);
     });
 });
