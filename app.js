@@ -5,7 +5,7 @@
 
 var express = require("express");
 var app = express();
-var port = process.env.PORT;
+var port = 3700;
  
 
 app.set('views', __dirname + '/views');
@@ -21,7 +21,7 @@ app.get("/foobar", function(req, res) {
 
 app.use(express.static(__dirname + '/public'));
 
-var io = require('socket.io').listen(port);
+var io = require('socket.io').listen(app.listen(process.env.PORT || 5000));
 
 // io.configure(function () { 
 //   io.set("transports", ["xhr-polling"]); 
@@ -32,9 +32,9 @@ io.sockets.on('connection', function (socket) {
     console.log('User connected');
     socket.emit('message', { message: 'welcome to the chat' });
     socket.on('send', function (data) {
-        console.log('Emitting Message');
+        console.log('Emitting Message')
         io.sockets.emit('message', data);
     });
 });
 
-console.log("Listening on port " + port);
+console.log("Listening on port " + process.env.PORT);
