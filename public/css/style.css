@@ -1,0 +1,12 @@
+#content {
+  height: 400px;
+  margin-bottom: 10px;
+}
+
+#chat {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  height: 100%;
+  overflow-y: scroll;
+}
