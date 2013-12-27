@@ -21,7 +21,7 @@ app.get("/foobar", function(req, res) {
 
 app.use(express.static(__dirname + '/public'));
 
-var io = require('socket.io').listen(app.listen(port));
+var io = require('socket.io').listen(app.listen(process.env.PORT || 5000));
 
 io.configure(function () { 
   io.set("transports", ["xhr-polling"]); 
