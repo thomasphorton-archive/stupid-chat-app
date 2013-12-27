@@ -17,6 +17,7 @@ window.onload = function() {
                 html += messages[i].message + '<br />';
             }
             content.innerHTML = html;
+            $("#content").scrollTop($("#content")[0].scrollHeight);
         } else {
             console.log("There is a problem:", data);
         }
@@ -37,7 +38,7 @@ window.onload = function() {
  
     function sendMessage() {
         if(name.value == "") {
-            console.log("Please type your name!");
+            alert("Please type your name!");
         } else {
             var text = field.value;
             socket.emit('send', { message: text, username: name.value });
