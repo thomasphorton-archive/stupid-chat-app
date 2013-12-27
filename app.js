@@ -5,7 +5,7 @@
 
 var express = require("express");
 var app = express();
-var port = 3700;
+var port = process.env.PORT || 5000;
  
 
 app.set('views', __dirname + '/views');
@@ -21,7 +21,7 @@ app.get("/foobar", function(req, res) {
 
 app.use(express.static(__dirname + '/public'));
 
-var io = require('socket.io').listen(app.listen(process.env.PORT || 5000));
+var io = require('socket.io').listen(port));
 
 // io.configure(function () { 
 //   io.set("transports", ["xhr-polling"]); 
