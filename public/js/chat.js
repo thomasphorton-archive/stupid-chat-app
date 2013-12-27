@@ -22,11 +22,9 @@ window.onload = function() {
         }
     });
   
- 
     sendButton.onclick = function() {
         sendMessage();
     };
-
 
     $("#field").keyup(function(e) {
         if(e.keyCode == 13) {
@@ -34,12 +32,12 @@ window.onload = function() {
         }
     });
 
- 
     function sendMessage() {
         if(name.value == "") {
             alert("Please type your name!");
         } else {
             var text = field.value;
+            ga('send', 'event', 'message', name.value, text);
             socket.emit('send', { message: text, username: name.value });
             field.value = "";
         }
