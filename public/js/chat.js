@@ -8,6 +8,7 @@ window.onload = function() {
     var name = document.getElementById("name");
  
     socket.on('message', function (data) {
+        console.log('on message');
         if(data.message) {
             messages.push(data);
             var html = '';
