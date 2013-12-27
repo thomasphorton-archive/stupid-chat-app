@@ -15,6 +15,10 @@ app.get("/", function(req, res){
     res.render("page");
 });
 
+app.get("/foobar", function(req, res) {
+  res.send('foobar');
+});
+
 app.use(express.static(__dirname + '/public'));
 
 var io = require('socket.io').listen(app.listen(port));
