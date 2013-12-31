@@ -15,7 +15,7 @@ var io = require('socket.io').listen(app.listen(port));
 
 io.sockets.on('connection', function (socket) {
     console.log('User connected');
-    socket.emit('message', { message: 'welcome to the thunderdome' });
+    socket.emit('message', { username: 'Major Tom', message: 'to ground control' });
     socket.on('send', function (data) {
         console.log('Emitting Message')
         io.sockets.emit('message', data);
