@@ -17,18 +17,19 @@ $(function() {
 
     socket.on('message', function (data) {
         if(data.message) {
+
+            clearInterval(titleInterval);
             
             if(document.hasFocus()) {
 
-                unreadMessages = 0;
-                document.title = 'Chat With Friends';
-                clearInterval(titleInterval);
 
             } else {
                 
                 var i = 0;
 
                 unreadMessages++;
+
+                
 
                 titleInterval = setInterval( function() {
 
