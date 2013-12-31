@@ -64,6 +64,11 @@ $(function() {
     }
   });
 
+  name.blur(function() {
+    $(this).attr('disabled', 'disabled');
+    socket.emit('set username', { username: $(this).val() });
+  });
+
   function sendMessage() {
     if(name.val() === "") {
       alert("Please type your name!");

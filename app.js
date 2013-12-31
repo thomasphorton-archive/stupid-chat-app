@@ -7,7 +7,7 @@ app.set('view engine', 'ejs');
 // app.engine('jade', require('jade').__express);
 
 app.get("/", function(req, res){
-    res.render("chat", {channel: ''});
+    res.render("chat", {channel: 'Public Chat'});
 });
 
 app.get("/:channel", function(req, res){
@@ -16,11 +16,17 @@ app.get("/:channel", function(req, res){
     res.render("chat", {channel: channel});
 });
 
-// app.get("/test", function(req, res){
-//     res.render("chat", {channel: 'test'});
-// });
-
 app.use(express.static(__dirname + '/public'));
+
+var pg = require('pg');
+
+pg.connect(process.env.DATABASE_URL, function(err, client, done) {
+  client.query('SELECT * FROM your_table', function(err, result) {
+    done();
+    if(err) return console.error(err);
+    console.log(result.rows);
+  });
+});
 
 var io = require('socket.io').listen(app.listen(port));
 
@@ -37,12 +43,16 @@ io.sockets.on('connection', function (socket) {
     if (channel === "") channel = "Public Chat";
 
     socket.emit('message', {username: 'Major Tom', message: 'Welcome to ' + channel});
+    socket.emit('message', {username: 'Ground Control', message: 'Thank you Major Tom, are you sitting in a tin can?'});
     console.log('joined channel: ', channel );
   });
   
   socket.on('send', function (data) {
-    console.log('emitting to channel: ', data.channel);
-    io.sockets.in(data.channel).emit('message', data);
+
+    var channel = data.channel || "Public Chat";
+
+    console.log('emitting to channel: ', channel);
+    io.sockets.in(channel).emit('message', data);
   });
 
 });
