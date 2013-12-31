@@ -21,6 +21,25 @@
       ga('send', 'pageview');
 
     </script>
+
+    <script src="//connect.soundcloud.com/sdk.js"></script>
+    <script>
+      SC.initialize({
+        client_id: "264411b4a52b43719dc678fc6d24f8c9",
+        redirect_uri: "http://stupidchatapp.herokuapp.com",
+      });
+
+      var channel = "<%= channel %>";     
+
+      // $(function() {
+
+      //   SC.oEmbed("http://soundcloud.com/forss/flickermood", {auto_play: false}, function(oembed){
+
+      //     $('#player').html(oembed.html);
+      //   });
+        
+      // })
+    </script>
   </head>
         
   <body>
@@ -36,8 +55,12 @@
     <div class="container">
 
       <div class="row">
-        <div id="content" class="col-md-12">
+        <div id="content" class="col-md-7">
           <div id="chat"></div>
+        </div>
+
+        <div class="col-md-5" id="player">
+          
         </div>
       </div>
       <div class="row">
@@ -54,13 +77,29 @@
           <div class="form-group">
             <button id="send" class="btn btn-default btn-lg btn-success">Send</button>
           </div>
+
+          <div class="form-inline">
+            <div class="form-group">
+              <label for="music">Submit a Track</label>
+              <input type="url" id="music" class="form-control" />
+            </div>
+            <div class="form-group">
+              <button id="submit-music" class="btn btn-primary btn">Submit</button>
+            </div>
+          </div>
+
+          
         </div>
+
+        
+
       </div>
-      <div class="row">
+    
+      <!--<div class="row">
         <div class="col-md-12">
           <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
           <!-- Stupid Chat App -->
-          <ins class="adsbygoogle"
+          <!--<ins class="adsbygoogle"
                style="display:inline-block;width:100%;height:50px"
                data-ad-client="ca-pub-1334887216588590"
                data-ad-slot="4181118338"></ins>
@@ -68,7 +107,7 @@
           (adsbygoogle = window.adsbygoogle || []).push({});
           </script>
         </div>
-      </div>
+      </div>-->
 
     </div>
 

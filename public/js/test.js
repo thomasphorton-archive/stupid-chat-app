@@ -1,9 +1,7 @@
 $(function() {
 
-  console.log(channel);
-
-  //var socket = io.connect(window.location.origin),// + '/chat/' + channel),
-  var field = $('#field'),
+  var socket = io.connect(window.location.origin + '/chat/test'),
+    field = $('#field'),
     send = $('#send'),
     chat = $('#chat'),
     name = $('#name'),
@@ -17,18 +15,13 @@ $(function() {
 
   });
 
-  var socket = io.connect();
-
-  socket.on('connect', function() {
-    socket.emit('channel', channel);
-  });
-
   socket.on('message', function (data) {
     if(data.message) {
 
       clearInterval(titleInterval);
       
       if(document.hasFocus()) {
+
 
       } else {
         
@@ -73,8 +66,8 @@ $(function() {
     } else {
       var text = field.val(),
         username = name.val();
-      ga('send', 'event', 'message', channel + ' ' + username, text);
-      socket.emit('send', { message: text, username: username, channel: channel });
+      ga('send', 'event', 'message', username, text);
+      socket.emit('send', { message: text, username: username });
       field.val("");
     }
   }
