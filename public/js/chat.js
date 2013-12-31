@@ -1,8 +1,5 @@
 $(function() {
 
-  console.log(channel);
-
-  //var socket = io.connect(window.location.origin),// + '/chat/' + channel),
   var field = $('#field'),
     send = $('#send'),
     chat = $('#chat'),

@@ -28,6 +28,10 @@ io.sockets.on('connection', function (socket) {
   console.log('User connected');
 
   socket.on('channel', function(channel) {
+
+    if(socket.channel) {
+      socket.leave(socket.channel);
+    }
     socket.join(channel);
 
     if (channel === "") channel = "Public Chat";
