@@ -18,7 +18,7 @@ $(function() {
     socket.on('message', function (data) {
         if(data.message) {
             
-            if(window.hasFocus()) {
+            if(document.hasFocus()) {
 
                 unreadMessages = 0;
                 document.title = 'Chat With Friends';
