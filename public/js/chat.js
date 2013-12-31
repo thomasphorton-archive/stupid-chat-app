@@ -66,7 +66,7 @@ $(function() {
             alert("Please type your name!");
         } else {
             var text = field.val(),
-            var username = name.val();
+                username = name.val();
             ga('send', 'event', 'message', username, text);
             socket.emit('send', { message: text, username: username });
             field.val("");
