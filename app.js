@@ -1,6 +1,7 @@
 var express = require("express");
 var app = express();
 var db = require('./database');
+var cron = require('cron').CronJob;
 var port = process.env.PORT || 5000;
 var _ = require('./public/js/underscore-min');
 
@@ -32,9 +33,6 @@ app.use(express.static(__dirname + '/public'));
 var io = require('socket.io').listen(app.listen(port));
 
 io.sockets.on('connection', function (socket) {
-  console.log('User connected');
-
-  
 
   socket.on('channel', function(channel) {
 
@@ -51,11 +49,10 @@ io.sockets.on('connection', function (socket) {
 
       _.each(result, function(message) {
 
-        console.log(message);
-
         socket.emit('message', {
           username: message.name,
-          message: message.message
+          message: message.message,
+          history: true
         });
 
       });
@@ -90,5 +87,19 @@ io.sockets.on('connection', function (socket) {
   });
 
 });
+
+var updatePopular = new cron('* */15 * * * * *', function() {
+
+  Message.find({}, function (err, result) {
+    if (err) throw err;
+    var popular = _.countBy(result, function(message) {
+      return message.channel;
+    });
+
+    io.sockets.emit('popular', popular);
+
+  });
+
+}, null, true);
 
 console.log("Listening on port " + port);

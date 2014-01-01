@@ -54,6 +54,10 @@ $(function() {
     }
   });
 
+  socket.on('popular', function(data) {
+    console.log(data);
+  });
+
   send.click(function() {
     sendMessage();
   });
