@@ -58,6 +58,24 @@ $(function() {
     console.log(data);
   });
 
+  socket.on('update_users', function(data) {
+    console.log(data);
+    var text;
+
+    if (data === 1) {
+
+      text = '1 user';
+
+    } else {
+
+      text = data + ' users';
+
+    }
+
+    $('.users-online').text(text);
+
+  });
+
   send.click(function() {
     sendMessage();
   });

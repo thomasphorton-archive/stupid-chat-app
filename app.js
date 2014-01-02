@@ -4,6 +4,7 @@ var db = require('./database');
 var cron = require('cron').CronJob;
 var port = process.env.PORT || 5000;
 var _ = require('./public/js/underscore-min');
+var users_online = 0;
 
 var Message = db.define("messages", {
 
@@ -34,6 +35,8 @@ var io = require('socket.io').listen(app.listen(port));
 
 io.sockets.on('connection', function (socket) {
 
+  users_online++;
+
   socket.on('channel', function(channel) {
 
     if(socket.channel) {
@@ -62,6 +65,12 @@ io.sockets.on('connection', function (socket) {
     // socket.emit('message', {username: 'Major Tom', message: 'Welcome to ' + channel});
     // socket.emit('message', {username: 'Ground Control', message: 'Thank you Major Tom, are you sitting in a tin can?'});
   
+  });
+
+  socket.on('disconnect', function() {
+
+    users_online--;
+
   });
   
   socket.on('send', function (data) {
@@ -99,6 +108,12 @@ var updatePopular = new cron('* */15 * * * * *', function() {
     io.sockets.emit('popular', popular);
 
   });
+
+}, null, true);
+
+var updateUserCount = new cron('* */10 * * * * *', function() {
+
+  io.sockets.emit('update_users', users_online);
 
 }, null, true);
 
