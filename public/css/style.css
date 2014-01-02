@@ -10,6 +10,17 @@
   height: 100%;
   overflow-y: scroll;
 }
+
+.name-control-group {
+  position: relative;
+}
+
+.name-clear {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+}
+
 @media
     only screen and (max-device-width: 1136px) and (min-device-width: 960px) and (max-device-height: 640px) and (min-device-height: 560px),
     only screen and (max-device-height: 1136px) and (min-device-height: 960px) and (max-device-width: 640px) and (min-device-width: 560px) {

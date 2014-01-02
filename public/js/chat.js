@@ -88,7 +88,10 @@ $(function() {
 
   name.blur(function() {
     $(this).attr('disabled', 'disabled');
-    socket.emit('set username', { username: $(this).val() });
+  });
+
+  $('.name-clear').click(function() {
+    name.removeAttr("disabled").val("");
   });
 
   function sendMessage() {

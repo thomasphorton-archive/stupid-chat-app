@@ -63,15 +63,14 @@ io.sockets.on('connection', function (socket) {
       });
 
     });
-
-    // socket.emit('message', {username: 'Major Tom', message: 'Welcome to ' + channel});
-    // socket.emit('message', {username: 'Ground Control', message: 'Thank you Major Tom, are you sitting in a tin can?'});
   
   });
 
   socket.on('disconnect', function() {
 
     users_online--;
+
+    console.log('user disconnected');
 
     io.sockets.emit('update_users', users_online);
 
