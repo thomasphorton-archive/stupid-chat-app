@@ -59,7 +59,7 @@ $(function() {
   });
 
   socket.on('update_users', function(data) {
-    console.log(data);
+
     var text;
 
     if (data === 1) {
