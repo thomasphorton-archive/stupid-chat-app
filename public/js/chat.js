@@ -56,15 +56,17 @@ $(function() {
 
   socket.on('popular', function(channels) {
 
+    console.log(channels);
+
     var popularChannels = $('.popular-channels');
 
     popularChannels.html("");
-    // console.log(channels);
-    _.each(channels, function(channel) {
 
-      var name = channel;
+    _.each(channels, function(data) {
 
-      channel = channel.toLowerCase();
+      var name = data.channel;
+
+      channel = data.channel.toLowerCase();
 
       if (channel == "public chat") {
         channel = "";
@@ -75,12 +77,9 @@ $(function() {
 
       var obj = {
         name: name,
-        url: url
+        url: url,
+        count: data.count
       }
-
-      //channel.url = encodeURI(channel)
-
-      console.log(obj);
 
       popularChannels.append(_.template(popularTemplate({channel: obj})));
 
@@ -139,4 +138,4 @@ $(function() {
 
 var messageTemplate = _.template("<p><b><%- data.username %></b>: <%- data.message %></p>");
 
-var popularTemplate = _.template("<li><a href='<%- channel.url %>'><%- channel.name %></a></li>");
+var popularTemplate = _.template("<li><a href='<%- channel.url %>' target='_blank'><%- channel.name %> (<%- channel.count %>)</a></li>");

@@ -112,13 +112,29 @@ var updatePopularCron = new cron('* */15 * * * * *', function() {
 var updatePopular = function() {
   Message.find({}, function (err, result) {
     if (err) throw err;
+
     var popular = _.countBy(result, function(message) {
       return message.channel;
     });
 
+    var pairs = _.pairs(popular);
+
+    var data = [];
+
+    _.each(_.toArray(pairs), function(channel) {
+
+      data.push({
+        channel: channel[0],
+        count: channel[1]
+      });
+
+    });
+
+    console.log(data);
+
     var top5 = _.first(_.keys(popular), 5);
 
-    io.sockets.emit('popular', top5);
+    io.sockets.emit('popular', data);
 
   });
 }
