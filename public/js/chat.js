@@ -66,13 +66,13 @@ $(function() {
 
       var name = data.channel;
 
-      channel = data.channel.toLowerCase();
+      channelID = data.channel.toLowerCase();
 
-      if (channel == "public chat") {
-        channel = "";
+      if (channelID == "public chat") {
+        channelID = "";
         url = "/";
       } else {
-        url = encodeURI(channel);
+        url = encodeURI(channelID);
       }
 
       var obj = {
