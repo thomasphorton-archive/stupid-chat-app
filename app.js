@@ -1,10 +1,13 @@
 require('newrelic');
 var express = require("express");
 var app = express();
+var moment = require('moment');
 var db = require('./database');
+var orm = require('orm');
 var cron = require('cron').CronJob;
 var port = process.env.PORT || 5000;
 var _ = require('./public/js/underscore-min');
+
 var users_online = 0;
 
 var Message = db.define("messages", {
@@ -12,7 +15,8 @@ var Message = db.define("messages", {
     userid: String,
     name: String,
     message: String,
-    channel: String
+    channel: String,
+    timestamp: Number
     
   });
 
@@ -60,7 +64,8 @@ io.sockets.on('connection', function (socket) {
         socket.emit('message', {
           username: message.name,
           message: message.message,
-          history: true
+          history: true,
+          timestamp: message.timestamp
         });
 
       });
@@ -86,16 +91,19 @@ io.sockets.on('connection', function (socket) {
     console.log('emitting to channel: ', channel);
     io.sockets.in(channel).emit('message', data);
 
+    var now = moment().unix();
+
+    console.log(now);
+
     Message.create([
       {
         name: data.username,
         message: data.message,
-        channel: channel
+        channel: channel,
+        timestamp: now
       }], function (err, items) {
 
       if (err) throw err;
-
-      console.log('success');
 
     });
 
@@ -110,6 +118,13 @@ var updatePopularCron = new cron('* */15 * * * * *', function() {
 }, null, true);
 
 var updatePopular = function() {
+
+  var past = moment().subtract('hours', 6).unix();
+
+  Message.find({timestamp: orm.lte(past)}).remove(function(err) {
+    if (err) throw err;
+  });
+
   Message.find({}, function (err, result) {
     if (err) throw err;
 
@@ -129,8 +144,6 @@ var updatePopular = function() {
       });
 
     });
-
-    console.log(data);
 
     var top5 = _.first(_.keys(popular), 5);
 

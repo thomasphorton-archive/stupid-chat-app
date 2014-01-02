@@ -10,7 +10,7 @@ client.connect();
 
 //query = client.query('DROP TABLE users');
 
-query = client.query('CREATE TABLE messages (id serial primary key, userid varchar(100), name varchar(100), message varchar(1000), channel varchar(100))');
+query = client.query('CREATE TABLE messages (id serial primary key, userid varchar(100), name varchar(100), message varchar(1000), channel varchar(100), timestamp date)');
 
 //query = client.query('DROP TABLE activities');
 
