@@ -9,7 +9,7 @@ $(function() {
 
   $(window).focus(function() {
     unreadMessages = 0;
-    document.title = 'Chat With Friends';
+    document.title = channel + ' - Chat With Friends';
     clearInterval(titleInterval);
 
   });
@@ -36,9 +36,9 @@ $(function() {
         titleInterval = setInterval( function() {
 
           if (i % 2 === 0) {
-            document.title = '(' + unreadMessages + ') Chat With Friends';
+            document.title = '(' + unreadMessages + ') ' + channel + ' - Chat With Friends';
           } else {
-            document.title = 'Chat With Friends';
+            document.title = channel + ' - Chat With Friends';
           }
 
           i++;
