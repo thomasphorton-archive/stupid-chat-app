@@ -37,6 +37,8 @@ io.sockets.on('connection', function (socket) {
 
   users_online++;
 
+  io.sockets.emit('update_users', users_online);
+
   socket.on('channel', function(channel) {
 
     if(socket.channel) {
@@ -70,6 +72,8 @@ io.sockets.on('connection', function (socket) {
   socket.on('disconnect', function() {
 
     users_online--;
+
+    io.sockets.emit('update_users', users_online);
 
   });
   
@@ -113,7 +117,7 @@ var updatePopular = new cron('* */15 * * * * *', function() {
 
 var updateUserCount = new cron('* */10 * * * * *', function() {
 
-  io.sockets.emit('update_users', users_online);
+  
 
 }, null, true);
 
