@@ -38,6 +38,8 @@ io.sockets.on('connection', function (socket) {
 
   users_online++;
 
+  updatePopular();
+
   io.sockets.emit('update_users', users_online);
 
   socket.on('channel', function(channel) {
@@ -101,24 +103,24 @@ io.sockets.on('connection', function (socket) {
 
 });
 
-var updatePopular = new cron('* */15 * * * * *', function() {
+var updatePopularCron = new cron('* */15 * * * * *', function() {
 
+  updatePopular();
+
+}, null, true);
+
+var updatePopular = function() {
   Message.find({}, function (err, result) {
     if (err) throw err;
     var popular = _.countBy(result, function(message) {
       return message.channel;
     });
 
-    io.sockets.emit('popular', popular);
+    var top5 = _.first(_.keys(popular), 5);
+
+    io.sockets.emit('popular', top5);
 
   });
-
-}, null, true);
-
-var updateUserCount = new cron('* */10 * * * * *', function() {
-
-  
-
-}, null, true);
+}
 
 console.log("Listening on port " + port);

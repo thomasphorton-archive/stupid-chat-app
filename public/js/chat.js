@@ -54,8 +54,37 @@ $(function() {
     }
   });
 
-  socket.on('popular', function(data) {
-    console.log(data);
+  socket.on('popular', function(channels) {
+
+    var popularChannels = $('.popular-channels');
+
+    popularChannels.html("");
+    // console.log(channels);
+    _.each(channels, function(channel) {
+
+      var name = channel;
+
+      channel = channel.toLowerCase();
+
+      if (channel == "public chat") {
+        channel = "";
+        url = "/";
+      } else {
+        url = encodeURI(channel);
+      }
+
+      var obj = {
+        name: name,
+        url: url
+      }
+
+      //channel.url = encodeURI(channel)
+
+      console.log(obj);
+
+      popularChannels.append(_.template(popularTemplate({channel: obj})));
+
+    });
   });
 
   socket.on('update_users', function(data) {
@@ -109,3 +138,5 @@ $(function() {
 });
 
 var messageTemplate = _.template("<p><b><%- data.username %></b>: <%- data.message %></p>");
+
+var popularTemplate = _.template("<li><a href='<%- channel.url %>'><%- channel.name %></a></li>");
