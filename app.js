@@ -91,11 +91,11 @@ io.sockets.on('connection', function (socket) {
 
     console.log('emitting to channel: ', channel);
 
-    if (data.message.match(imageRegex)) {
-      data.type = "image"
-    } else {
-      data.type = "message"
-    }
+    // if (data.message.match(imageRegex)) {
+    //   data.type = "image"
+    // } else {
+    //   data.type = "message"
+    // }
     
     io.sockets.in(channel).emit('message', data);
 
