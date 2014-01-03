@@ -21,6 +21,7 @@ $(function() {
   });
 
   socket.on('message', function (data) {
+
     if(data.message) {
 
       clearInterval(titleInterval);
@@ -44,9 +45,18 @@ $(function() {
           i++;
 
         }, 500);
+
       }
 
-      chat.append(messageTemplate({data: data}));
+      if (data.type === 'image') {
+      
+        chat.append(imageTemplate({data: data}));
+
+      } else {
+
+        chat.append(messageTemplate({data: data}));
+      
+      }
 
       chat.scrollTop(chat[0].scrollHeight);
     } else {
@@ -138,4 +148,6 @@ $(function() {
 
 var messageTemplate = _.template("<p><b><%- data.username %></b>: <%- data.message %></p>");
 
-var popularTemplate = _.template("<li><a href='<%- channel.url %>' target='_blank'><%- channel.name %> (<%- channel.count %>)</a></li>");
+var imageTemplate = _.template("<p><b><%- data.username %></b>: <img src='<%- data.message %>' /></p>")
+
+var popularTemplate = _.template("<li><a href='<%- channel.name %>' target='_blank'><%- channel.name %> (<%- channel.count %>)</a></li>");

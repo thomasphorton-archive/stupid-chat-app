@@ -32,6 +32,7 @@ app.get("/:channel", function(req, res){
 
   var channel = req.params.channel.toLowerCase();
     res.render("chat", {channel: channel});
+
 });
 
 app.use(express.static(__dirname + '/public'));
@@ -89,11 +90,20 @@ io.sockets.on('connection', function (socket) {
     var channel = data.channel || "Public Chat";
 
     console.log('emitting to channel: ', channel);
+
+    if (data.message.match(imageRegex)) {
+      data.type = "image"
+    } else {
+      data.type = "message"
+    }
+    
     io.sockets.in(channel).emit('message', data);
 
     var now = moment().unix();
 
-    console.log(now);
+    var imageRegex = /(https?:\/\/.*\.(?:png|jpg))/i;
+
+    
 
     Message.create([
       {
@@ -119,11 +129,11 @@ var updatePopularCron = new cron('* */15 * * * * *', function() {
 
 var updatePopular = function() {
 
-  var past = moment().subtract('hours', 6).unix();
+  // var past = moment().subtract('hours', 6).unix();
 
-  Message.find({timestamp: orm.lte(past)}).remove(function(err) {
-    if (err) throw err;
-  });
+  // Message.find({timestamp: orm.lte(past)}).remove(function(err) {
+  //   if (err) throw err;
+  // });
 
   Message.find({}, function (err, result) {
     if (err) throw err;
