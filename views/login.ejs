@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/css/bootstrap.min.css'/>
+    <link rel='stylesheet' href='/css/style.css'/>
+    <script src='//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js'></script>
+    <script src='/js/bootstrap.min.js'></script>
+    <script src='/js/underscore-min.js'></script>
+    <script src='/js/backbone-min.js'></script>
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+  </head>
+  <body>
+    <header class="navbar">
+      <div class="container">
+        <div class="navbar-header">
+          <a href="/" class="navbar-brand">Chat With Friends</a>
+        </div>
+      </div>
+    </header>
+    
+    <div class="container" id="app-container">
+      
+      <h1>Log In</h1>
+
+      <form method="post" action="/login">
+        
+        <div class="form-group">
+          <input type="email" class="form-control" placeholder="email address" name="username" required>
+        </div>
+
+        <div class="form-group">
+          <input type="password" class="form-control" placeholder="password" name="password" id="password" required>
+        </div>
+
+        <div class="form-group">
+          <button type="submit" class="btn btn-default">Sign In</button>
+        </div>
+
+      </form>
+
+      <span>Don't have an account? <a href="/signup">Sign Up!</a></span>
+
+    </div>
+    
+  </body>
+</html>

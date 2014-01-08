@@ -1,3 +1,11 @@
+.navbar-header {
+  width: 100%;
+}
+
+.user-buttons {
+  margin-top: 10px;
+}
+
 #content {
   height: 400px;
   margin-bottom: 10px;
@@ -19,6 +27,10 @@
   position: absolute;
   top: 50%;
   right: 10px;
+}
+
+.post-type-tabs .tab-pane {
+  margin-top: 15px;
 }
 
 @media
