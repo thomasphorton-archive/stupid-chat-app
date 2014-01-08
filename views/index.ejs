@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Chat With Friends</title>
+    <link rel='stylesheet' href='/css/bootstrap.min.css'/>
+    <link rel='stylesheet' href='/css/fontello.css'/>
+    <link rel='stylesheet' href='/css/style.css'/>
+    <script src='//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js'></script>
+    <script src='/js/bootstrap.min.js'></script>
+    <script src='/js/underscore-min.js'></script>
+    <script src='/js/backbone-min.js'></script>
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-28026409-2', 'stupidchatapp.herokuapp.com');
+      ga('send', 'pageview');
+
+    </script>
+
+    <script>
+    $(function() {
+    
+      var signin_form = $('#signin-form'),
+          user_signin = $('.user-signin'),
+          user_register = $('.user-register');
+
+      user_register.click(function() {
+
+        signin_form.attr('action', '/users/create');
+
+      });
+
+    });
+    </script>
+
+  </head>
+        
+  <body>
+
+  <div class="jumbotron">
+    <div class="container">
+
+      <div class="col-md-4">
+        <h1><i class="icon-comment-alt"></i> Hello!</h1>
+      </div>
+
+      <div class="col-md-8">
+        <h2>Sign In</h2>
+
+      <form method="post" action="/login" id="signin-form">
+        
+        <div class="form-group">
+          <input type="email" class="form-control" placeholder="email address" name="username" required>
+        </div>
+
+        <div class="form-group">
+          <input type="password" class="form-control" placeholder="password" name="password" id="password" required>
+        </div>
+
+        <div class="form-group">
+          <button type="submit" class="btn btn-success user-signin">Sign In</button>
+          <button type="submit" class="btn btn-primary user-register">Register</button>
+          -or- <a href="/c/chat">Continue as Guest</a>
+        </div>
+
+      </form>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="col-md-12">
+      <h2>The Stupid Chat App is many things...</h2>
+      <p class="pull-right">but finished is not one of them.</p>
+    </div>
+
+    <div class="col-md-12">
+      <h2>Features:</h2>
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Account Type</th>
+            <th>Guest User</th>
+            <th>Registered User</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Anonymous Text Chat</td>
+            <td class="text-center"><span class="glyphicon glyphicon-ok"></span></td>
+            <td class="text-center"><span class="glyphicon glyphicon-ok"></span></td>
+          </tr>
+          <tr>
+            <td>Attach Links</td>
+            <td class="text-center"><span class="glyphicon glyphicon-remove"></span></td>
+            <td class="text-center success"><span class="glyphicon glyphicon-ok"></span></td>
+          </tr>
+          <tr>
+            <td>Attach Images</td>
+            <td class="text-center"><span class="glyphicon glyphicon-remove"></span></td>
+            <td class="text-center success"><span class="glyphicon glyphicon-ok"></span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div> 
+
+  </body>
+</html>
