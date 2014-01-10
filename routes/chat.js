@@ -1,5 +1,7 @@
 module.exports = function(app, io, db, _) {
 
+  var qs = require('querystring');
+
   app.get("/c/", function(req, res){
     
     if (req.user) {
@@ -16,15 +18,35 @@ module.exports = function(app, io, db, _) {
 
     var channel = req.params.channel.toLowerCase();
 
-    console.log(req.params.channel);
+    var str = req.url.split('?')[1];
+      query = qs.parse(str);
+    console.log('qs: ', query);
 
-    if (req.user) {
-      user = _.pick(req.user[0], 'username', 'status');
-    } else {
-      user = null;
+    if (query.guest) {
+      req.logout();
     }
 
-    res.render("chat", {channel: channel, user: user});
+    if (req.user) {
+      
+      user = _.pick(req.user[0], 'username', 'status');
+
+      if (user.status === 0) {
+        // registered but unverified
+
+        res.render("verify", {title: 'Verify Your Email Address', user: user});
+
+      } else {
+
+        res.render("chat", {channel: channel, user: user});
+      }
+
+    } else {
+
+      res.render("chat", {channel: channel, user: null});
+    
+    }
+
+    
 
   });
 

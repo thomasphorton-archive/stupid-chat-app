@@ -1,13 +1,17 @@
 module.exports = function(app, db, passport, _) {
 
   var bcrypt = require('bcrypt')
+    , crypto = require('crypto')
     , LocalStrategy = require('passport-local').Strategy;
+
+
 
   var User = db.define("users", {
 
     username: String,
     password: String,
     salt: String,
+    token: String,
     status: Number,
     displayname: String
 
@@ -33,12 +37,10 @@ module.exports = function(app, db, passport, _) {
         console.log('user: ', user);
 
         if (!user || _.isEmpty(user)) {
-          console.log('no user');
+
           return done(null, false, { message: 'Incorrect username.' });
 
         }
-
-        console.log('user found');
 
         var storedPass = user[0].password || 'nopasswordsupplied',
           salt = user[0].salt || 'nosaltsupplied';
@@ -75,25 +77,66 @@ module.exports = function(app, db, passport, _) {
       } else {
         var salt = bcrypt.genSaltSync(10);
         var hash = bcrypt.hashSync(password, salt);
+        // var token;
 
-        console.log('Salt: ', salt);
-        console.log('Hash: ', hash);
-        console.log('Username: ', username);
+        crypto.randomBytes(48, function(ex, buf) {
+          var token = buf.toString('hex');
 
-        User.create([
-          {
-            username: username,
-            password: hash,
-            salt: salt,
-            status: 0
+          User.create([
+            {
+              username: username,
+              password: hash,
+              salt: salt,
+              token: token,
+              status: 0
           }
-        ], function (err, items) {
+          ], function (err, items) {
 
-          if (err) throw err;
+            if (err) throw err;
 
-          console.log(items);
+            console.log(items);
 
-          res.redirect('/');
+            var nodemailer = require("nodemailer");
+
+            // create reusable transport method (opens pool of SMTP connections)
+            var smtpTransport = nodemailer.createTransport("SMTP",{
+                service: "Gmail",
+                auth: {
+                    user: "thomasphorton@gmail.com",
+                    pass: "w4gukoj1GM"
+                }
+            });
+
+            // setup e-mail data with unicode symbols
+            var mailOptions = {
+                from: "Stupid Chat App <thomasphorton@gmail.com>", // sender address
+                to: username, // list of receivers
+                subject: "Please Verify Your Account", // Subject line
+                text: "", // plaintext body
+                html: "<a href='http://localhost:5000/verify/" + username + "/" + token + "'>Click to Verify</a>" // html body
+            }
+
+            // send mail with defined transport object
+            smtpTransport.sendMail(mailOptions, function(error, response){
+                if(error){
+                    console.log(error);
+                }else{
+                    console.log("Message sent: " + response.message);
+                }
+
+                // if you don't want to use this transport object anymore, uncomment following line
+                //smtpTransport.close(); // shut down the connection pool, no more messages
+            });
+
+            res.redirect('/');
+
+          });
+
+          console.log('Salt: ', salt);
+          console.log('Hash: ', hash);
+          console.log('Username: ', username);
+
+          console.log('Token: ', token);
 
         });
 
