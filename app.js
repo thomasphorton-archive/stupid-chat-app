@@ -40,6 +40,6 @@ chat = require('./routes/chat')(app, io, db, _);
 
 user = require('./routes/user')(app, io, db, _);
 
-// console.log(chat.users_online);
+registration = require('./routes/registration')(app, db, _);
 
 console.log("Listening on port " + port);
