@@ -6,6 +6,8 @@ var express = require("express")
   , passport = require('passport')
   , port = process.env.PORT || 5000
   , io = require('socket.io').listen(app.listen(port))
+  , mandrill = require('mandrill-api/mandrill')
+  , mandrill_client = new mandrill.Mandrill(process.env.MANDRILL_API_KEY)
   , _ = require('./public/js/underscore-min');
 
 app.use(express.static(__dirname + '/public'));
