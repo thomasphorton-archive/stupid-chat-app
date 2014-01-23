@@ -1,4 +1,4 @@
-module.exports = function(app, db, passport, _) {
+module.exports = function(app, db, passport, mandrill_client, _) {
 
   var bcrypt = require('bcrypt')
     , crypto = require('crypto')
@@ -94,36 +94,69 @@ module.exports = function(app, db, passport, _) {
 
             console.log(items);
 
-            var nodemailer = require("nodemailer");
-
-            // create reusable transport method (opens pool of SMTP connections)
-            var smtpTransport = nodemailer.createTransport("SMTP",{
-                service: "Gmail",
-                auth: {
-                    user: process.env.mail_user,
-                    pass: process.env.mail_password
+            var message = {
+              "html": "<a href='http://localhost:5000/verify/" + username + "/" + token + "'>Click to Verify</a>",
+              "text": "Example text content",
+              "subject": "example subject",
+              "from_email": "thomasphorton@gmail.com",
+              "from_name": "Stupid Chat App",
+              "to": [{
+                "email": username,
+                "name": "Recipient Name",
+                "type": "to"
+              }],
+              "headers": {
+                "Reply-To": "message.reply@example.com"
+              },
+              "important": false,
+              "track_opens": null,
+              "track_clicks": null,
+              "auto_text": null,
+              "auto_html": null,
+              "inline_css": null,
+              "url_strip_qs": null,
+              "preserve_recipients": null,
+              "view_content_link": null,
+              "tracking_domain": null,
+              "signing_domain": null,
+              "return_path_domain": null,
+              "merge": true,
+              "tags": [
+                "account-confirmation"
+              ],
+              "subaccount": "customer-123",
+              "google_analytics_domains": [
+                "stupidchatapp.herokuapp.com"
+              ],
+              "google_analytics_campaign": "message.from_email@example.com",
+              "metadata": {
+                "website": "stupidchatapp.herokuapp.com"
+              },
+              "recipient_metadata": [{
+                "rcpt": username,
+                "values": {
+                  "user_id": 123456
                 }
-            });
-
-            // setup e-mail data with unicode symbols
-            var mailOptions = {
-                from: "Stupid Chat App <thomasphorton@gmail.com>", // sender address
-                to: username, // list of receivers
-                subject: "Please Verify Your Account", // Subject line
-                text: "", // plaintext body
-                html: "<a href='http://localhost:5000/verify/" + username + "/" + token + "'>Click to Verify</a>" // html body
-            }
-
-            // send mail with defined transport object
-            smtpTransport.sendMail(mailOptions, function(error, response){
-                if(error){
-                    console.log(error);
-                }else{
-                    console.log("Message sent: " + response.message);
-                }
-
-                // if you don't want to use this transport object anymore, uncomment following line
-                //smtpTransport.close(); // shut down the connection pool, no more messages
+              }],
+            };
+           
+            var async = false;
+            var ip_pool = "Main Pool";
+            var send_at = "example send_at";
+            mandrill_client.messages.send({"message": message, "async": async, "ip_pool": ip_pool, "send_at": send_at}, function(result) {
+                console.log(result);
+                /*
+                [{
+                        "email": "recipient.email@example.com",
+                        "status": "sent",
+                        "reject_reason": "hard-bounce",
+                        "_id": "abc123abc123abc123abc123abc123"
+                    }]
+                */
+            }, function(e) {
+                // Mandrill returns the error as an object with name and message keys
+                console.log('A mandrill error occurred: ' + e.name + ' - ' + e.message);
+                // A mandrill error occurred: Unknown_Subaccount - No subaccount exists with the id 'customer-123'
             });
 
             res.redirect('/');

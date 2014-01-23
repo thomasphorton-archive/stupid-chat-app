@@ -36,7 +36,7 @@ app.get("/signup", function(req, res) {
   res.render("signup", {title: 'Sign Up'});
 });
 
-login = require('./routes/login')(app, db, passport, _);
+login = require('./routes/login')(app, db, passport, mandrill_client, _);
 
 chat = require('./routes/chat')(app, io, db, _);
 
