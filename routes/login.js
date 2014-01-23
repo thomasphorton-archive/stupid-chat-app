@@ -92,7 +92,9 @@ module.exports = function(app, db, passport, mandrill_client, _) {
 
             if (err) throw err;
 
-            console.log(items);
+            // console.log(items);
+
+            console.log("headers.host: ", req.headers.host);
 
             var message = {
               "html": "<a href='" + req.headers.host + "/verify/" + username + "/" + token + "'>Click to Verify Your Email Address</a>",
@@ -113,6 +115,7 @@ module.exports = function(app, db, passport, mandrill_client, _) {
       
             mandrill_client.messages.send({"message": message, "async": async, "ip_pool": ip_pool}, function(result) {
                 console.log(result);
+                console.log('success!')
             }, function(e) {
                 // Mandrill returns the error as an object with name and message keys
                 console.log('A mandrill error occurred: ' + e.name + ' - ' + e.message);
