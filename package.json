@@ -18,7 +18,8 @@
     "passport": "~0.1.18",
     "passport-local": "~0.1.6",
     "bcrypt": "~0.7.7",
-    "nodemailer": "~0.6.0"
+    "nodemailer": "~0.6.0",
+    "mandrill": "~0.1.0"
   },
   "engines": {
     "node": "0.10.x"

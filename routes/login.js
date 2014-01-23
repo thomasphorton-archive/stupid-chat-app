@@ -95,64 +95,24 @@ module.exports = function(app, db, passport, mandrill_client, _) {
             console.log(items);
 
             var message = {
-              "html": "<a href='http://localhost:5000/verify/" + username + "/" + token + "'>Click to Verify</a>",
+              "html": "<a href='" + req.headers.host + "/verify/" + username + "/" + token + "'>Click to Verify Your Email Address</a>",
               "text": "Example text content",
-              "subject": "example subject",
+              "subject": "Verify Your Email Address for Stupid Chat App",
               "from_email": "thomasphorton@gmail.com",
               "from_name": "Stupid Chat App",
               "to": [{
-                "email": username,
-                "name": "Recipient Name",
-                "type": "to"
+                "email": username
               }],
               "headers": {
-                "Reply-To": "message.reply@example.com"
-              },
-              "important": false,
-              "track_opens": null,
-              "track_clicks": null,
-              "auto_text": null,
-              "auto_html": null,
-              "inline_css": null,
-              "url_strip_qs": null,
-              "preserve_recipients": null,
-              "view_content_link": null,
-              "tracking_domain": null,
-              "signing_domain": null,
-              "return_path_domain": null,
-              "merge": true,
-              "tags": [
-                "account-confirmation"
-              ],
-              "subaccount": "customer-123",
-              "google_analytics_domains": [
-                "stupidchatapp.herokuapp.com"
-              ],
-              "google_analytics_campaign": "message.from_email@example.com",
-              "metadata": {
-                "website": "stupidchatapp.herokuapp.com"
-              },
-              "recipient_metadata": [{
-                "rcpt": username,
-                "values": {
-                  "user_id": 123456
-                }
-              }],
+                "Reply-To": "no-reply@stupidchatapp.com"
+              }
             };
            
             var async = false;
             var ip_pool = "Main Pool";
-            var send_at = "example send_at";
-            mandrill_client.messages.send({"message": message, "async": async, "ip_pool": ip_pool, "send_at": send_at}, function(result) {
+      
+            mandrill_client.messages.send({"message": message, "async": async, "ip_pool": ip_pool}, function(result) {
                 console.log(result);
-                /*
-                [{
-                        "email": "recipient.email@example.com",
-                        "status": "sent",
-                        "reject_reason": "hard-bounce",
-                        "_id": "abc123abc123abc123abc123abc123"
-                    }]
-                */
             }, function(e) {
                 // Mandrill returns the error as an object with name and message keys
                 console.log('A mandrill error occurred: ' + e.name + ' - ' + e.message);
