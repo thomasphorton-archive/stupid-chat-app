@@ -97,7 +97,7 @@ module.exports = function(app, db, passport, mandrill_client, _) {
             console.log("headers.host: ", req.headers.host);
 
             var message = {
-              "html": "<a href='" + req.headers.host + "/verify/" + username + "/" + token + "'>Click to Verify Your Email Address</a>",
+              "html": "<a href='http://" + req.headers.host + "/verify/" + username + "/" + token + "'>Click to Verify Your Email Address</a>",
               "text": "Example text content",
               "subject": "Verify Your Email Address for Stupid Chat App",
               "from_email": "thomasphorton@gmail.com",
