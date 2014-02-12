@@ -14,6 +14,10 @@ module.exports = function(app, io, db, _) {
     
   });
 
+  app.get("/s", function(req, res) {
+
+  });
+
   app.get("/c/:channel", function(req, res){
 
     var channel = req.params.channel.toLowerCase();
@@ -45,8 +49,6 @@ module.exports = function(app, io, db, _) {
       res.render("chat", {channel: channel, user: null});
     
     }
-
-    
 
   });
 
@@ -89,9 +91,10 @@ module.exports = function(app, io, db, _) {
 
         _.each(result, function(message) {
 
-          console.log(message);
+          console.log("message: ", message);
 
           socket.emit('message', {
+            id: message.id,
             username: message.name,
             message: message.message,
             type: message.type,
@@ -109,7 +112,7 @@ module.exports = function(app, io, db, _) {
 
       users_online--;
 
-      console.log('user disconnected');
+      // console.log('user disconnected');
 
       io.sockets.emit('update_users', users_online);
 
