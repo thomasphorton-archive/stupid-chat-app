@@ -201,7 +201,7 @@ $(function() {
 
 });
 
-var messageTemplate = _.template("<p><b><%- data.username %></b>: <%- data.id %> <%- data.message %></p>");
+var messageTemplate = _.template("<p><b><%- data.username %></b>: <%- data.message %></p>");
 
 var imageTemplate = _.template("<p><b><%- data.username %></b>: <img src='<%- data.message %>' /></p>");
 
