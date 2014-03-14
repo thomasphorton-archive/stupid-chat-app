@@ -24,7 +24,6 @@ module.exports = function(app, io, db, _) {
 
     var str = req.url.split('?')[1];
       query = qs.parse(str);
-    console.log('qs: ', query);
 
     if (query.guest) {
       req.logout();
@@ -91,8 +90,6 @@ module.exports = function(app, io, db, _) {
 
         _.each(result, function(message) {
 
-          console.log("message: ", message);
-
           socket.emit('message', {
             id: message.id,
             username: message.name,
@@ -112,8 +109,6 @@ module.exports = function(app, io, db, _) {
 
       users_online--;
 
-      // console.log('user disconnected');
-
       io.sockets.emit('update_users', users_online);
 
     });
@@ -125,8 +120,6 @@ module.exports = function(app, io, db, _) {
       io.sockets.in(channel).emit('message', data);
 
       var now = moment().unix();
-
-      console.log(data);
 
       Message.create([
         {

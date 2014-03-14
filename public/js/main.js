@@ -4,12 +4,13 @@ requirejs.config({
     jquery: 'jquery-2.10.0-min',
     underscore: 'underscore-min',
     backbone: 'backbone-min',
-    bootstrap: 'bootstrap'
+    bootstrap: 'bootstrap',
+    chat: 'chat'
   }
 
 });
 
-requirejs(['jquery'],
-  function ($) {
-
+requirejs(['chat'],
+  function (chat) {
+    
   });

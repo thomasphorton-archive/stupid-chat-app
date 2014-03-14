@@ -1,3 +1,5 @@
+require('foobar');
+
 $(function() {
 
   var message_field = $('.message-field'),
@@ -157,7 +159,6 @@ $(function() {
 
   post_message.click(function() {
     chat.message_type = $(this).data('type');
-    console.log(chat.message_type);
     sendMessage();
   });
 
