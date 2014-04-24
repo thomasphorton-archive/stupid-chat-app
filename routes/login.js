@@ -1,19 +1,13 @@
-module.exports = function(app, db, passport, mandrill_client, _) {
+var User = require('../models/user'),
+    registration = require('../routes/registration'),
+    mandrill = require('mandrill-api/mandrill')
+    mandrill_client = new mandrill.Mandrill(process.env.MANDRILL_API_KEY);
+
+module.exports = function(app, db, passport, _) {
 
   var bcrypt = require('bcrypt')
     , crypto = require('crypto')
     , LocalStrategy = require('passport-local').Strategy;
-
-  var User = db.define("users", {
-
-    username: String,
-    password: String,
-    salt: String,
-    token: String,
-    status: Number,
-    displayname: String
-
-  });
 
   passport.serializeUser(function(user, done) {
     done(null, user[0].id);
@@ -92,7 +86,7 @@ module.exports = function(app, db, passport, mandrill_client, _) {
 
             if (err) throw err;
 
-            send_verification_email(username, token, req);
+            registration.send_verification_email(username, token);
 
             res.redirect('/');
 
@@ -105,34 +99,6 @@ module.exports = function(app, db, passport, mandrill_client, _) {
     });
 
   });
-
-  var send_verification_email = function(username, token, req) {
-    var message = {
-      "html": "<a href='http://" + req.headers.host + "/verify/" + username + "/" + token + "'>Click to Verify Your Email Address</a>",
-      "text": "Example text content",
-      "subject": "Verify Your Email Address for Stupid Chat App",
-      "from_email": "no-reply@stupidchatapp.com",
-      "from_name": "Stupid Chat App",
-      "to": [{
-        "email": username
-      }],
-      "headers": {
-        "Reply-To": "no-reply@stupidchatapp.com"
-      }
-    };
-
-    var async = false;
-    var ip_pool = "Main Pool";
-
-    mandrill_client.messages.send({"message": message, "async": async, "ip_pool": ip_pool}, function(result) {
-        console.log(result);
-        console.log('success!')
-    }, function(e) {
-        // Mandrill returns the error as an object with name and message keys
-        console.log('A mandrill error occurred: ' + e.name + ' - ' + e.message);
-        // A mandrill error occurred: Unknown_Subaccount - No subaccount exists with the id 'customer-123'
-    });
-  }
 
   app.get('/login', function(req, res) {
 

@@ -24,21 +24,13 @@ app.use(passport.session());
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 
-app.get('/', function(req, res) {
-  res.render("index");
-});
+var routes = require('./routes');
+routes.set(app);
 
-app.get("/login", function(req, res) {
-  res.render("login", {title: 'Login'});
-});
+login = require('./routes/login')(app, db, passport, _);
 
-app.get("/signup", function(req, res) {
-  res.render("signup", {title: 'Sign Up'});
-});
-
-login = require('./routes/login')(app, db, passport, mandrill_client, _);
-
-chat = require('./routes/chat')(app, io, db, _);
+chat = require('./routes/chat');
+chat.init(io);
 
 user = require('./routes/user')(app, io, db, _);
 

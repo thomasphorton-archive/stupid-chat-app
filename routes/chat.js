@@ -1,36 +1,20 @@
-module.exports = function(app, io, db, _) {
+var db = require('../database'),
+    moment = require('moment'),
+    Message = require('../models/message.js');
+    _ = require('../public/js/underscore-min');
 
-  var qs = require('querystring');
-
-  app.get("/c/", function(req, res){
-    
-    if (req.user) {
-      user = _.pick(req.user[0], 'username', 'status');
-    } else {
-      user = null;
-    }
-
-    res.render("chat", {channel: 'Public Chat', user: user});
-    
-  });
-
-  app.get("/s", function(req, res) {
-
-  });
+module.exports.set = function(app) {
 
   app.get("/c/:channel", function(req, res){
 
     var channel = req.params.channel.toLowerCase();
 
-    var str = req.url.split('?')[1];
-      query = qs.parse(str);
-
-    if (query.guest) {
+    if (req.query.guest === 'true') {
       req.logout();
     }
 
     if (req.user) {
-      
+
       user = _.pick(req.user[0], 'username', 'status');
 
       if (user.status === 0) {
@@ -46,32 +30,32 @@ module.exports = function(app, io, db, _) {
     } else {
 
       res.render("chat", {channel: channel, user: null});
-    
+
     }
 
   });
 
-  var moment = require('moment')
-    , cron = require('cron').CronJob;
+  app.get("/c/", function(req, res){
+
+    if (req.user) {
+      user = _.pick(req.user[0], 'username', 'status');
+    } else {
+      user = null;
+    }
+
+    res.render("chat", {channel: 'Public Chat', user: user});
+
+  });
+
+}
+
+module.exports.init = function(io) {
 
   var users_online = 0;
-
-  var Message = db.define("messages", {
-
-    userid: String,
-    name: String,
-    message: String,
-    type: String,
-    channel: String,
-    timestamp: Number
-    
-  });
 
   io.sockets.on('connection', function (socket) {
 
     users_online++;
-
-    updatePopular();
 
     io.sockets.emit('update_users', users_online);
 
@@ -90,19 +74,28 @@ module.exports = function(app, io, db, _) {
 
         _.each(result, function(message) {
 
-          socket.emit('message', {
-            id: message.id,
-            username: message.name,
-            message: message.message,
-            type: message.type,
-            history: true,
-            timestamp: message.timestamp
-          });
+          var now = moment().unix();
+
+          if (now - message.timestamp > 86400) {
+            // Remove messages older than 1 day
+            Message.find({id: message.id}).remove(function(err) {
+              if (err) throw err;
+            });
+          } else {
+            socket.emit('message', {
+              id: message.id,
+              username: message.name,
+              message: message.message,
+              type: message.type,
+              history: true,
+              timestamp: message.timestamp
+            });
+          }
 
         });
 
       });
-    
+
     });
 
     socket.on('disconnect', function() {
@@ -112,14 +105,13 @@ module.exports = function(app, io, db, _) {
       io.sockets.emit('update_users', users_online);
 
     });
-    
+
     socket.on('send', function (data) {
 
-      var channel = data.channel || "Public Chat";
-      
-      io.sockets.in(channel).emit('message', data);
+      var channel = data.channel || "Public Chat",
+          now = moment().unix();
 
-      var now = moment().unix();
+      io.sockets.in(channel).emit('message', data);
 
       Message.create([
         {
@@ -138,43 +130,12 @@ module.exports = function(app, io, db, _) {
 
   });
 
-  var updatePopularCron = new cron('* */15 * * * * *', function() {
-
-    updatePopular();
-
-  }, null, true);
-
-  var updatePopular = function() {
-
-    Message.find({}, function (err, result) {
-      if (err) throw err;
-
-      var popular = _.countBy(result, function(message) {
-        return message.channel;
-      });
-
-      var pairs = _.pairs(popular);
-
-      var data = [];
-
-      _.each(_.toArray(pairs), function(channel) {
-
-        data.push({
-          channel: channel[0],
-          count: channel[1]
-        });
-
-      });
-
-      var top5 = _.first(_.keys(popular), 5);
-
-      io.sockets.emit('popular', data);
-
-    });
-  }
-
   return {
     users_online: 0
   }
 
+}
+
+module.exports.test = function() {
+  console.log('*** TEST ***');
 }
