@@ -1,5 +1,3 @@
-require('foobar');
-
 $(function() {
 
   var message_field = $('.message-field'),
@@ -14,7 +12,6 @@ $(function() {
     chat.unreadMessages = 0;
     document.title = channel + ' - Chat With Friends';
     clearInterval(titleInterval);
-
   });
 
   var chat = {
@@ -40,11 +37,11 @@ $(function() {
     if(data.message) {
 
       clearInterval(titleInterval);
-      
+
       if(document.hasFocus()) {
 
       } else {
-        
+
         var i = 0;
 
         chat.unreadMessages++;
@@ -70,11 +67,11 @@ $(function() {
           $chat.append(linkTemplate({data: data}));
 
         } else {
-      
+
           $chat.append(imageTemplate({data: data}));
 
         }
-      
+
       } else if (data.type === 'video') {
 
         if (chat.safe_for_work_mode) {
@@ -82,9 +79,9 @@ $(function() {
           $chat.append(linkTemplate({data: data}));
 
         } else {
-           
+
           $chat.append(videoTemplate({data: data}));
-        
+
         }
 
       } else if (data.type === 'link') {
@@ -94,15 +91,15 @@ $(function() {
       } else {
 
         $chat.append(messageTemplate({data: data}));
-      
+
       }
 
       $chat.scrollTop($chat[0].scrollHeight);
 
     } else {
-      
+
       console.log("There is a problem:", data);
-    
+
     }
 
   });
@@ -190,7 +187,7 @@ $(function() {
         username = name.val();
       ga('send', 'event', 'message', channel + ' ' + username, text);
 
-      socket.emit('send', { 
+      socket.emit('send', {
         message: text,
         type: chat.message_type,
         username: username,

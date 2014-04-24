@@ -18,7 +18,10 @@ module.exports = function(app, db, _) {
 
     console.log('about to search');
 
-    User.find({username: username, token: token}).each(function(user) {
+    User.find({
+      username: username,
+      token: token
+    }).each(function(user) {
 
       console.log(user);
       user.token = '';

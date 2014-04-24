@@ -44,7 +44,7 @@ module.exports = function(app, db, passport, mandrill_client, _) {
           salt = user[0].salt || 'nosaltsupplied';
 
           bcrypt.hash(password, salt, function(err, hash) {
-            
+
             if (storedPass === hash) {
               return done(null, user);
             } else {
@@ -87,50 +87,16 @@ module.exports = function(app, db, passport, mandrill_client, _) {
               salt: salt,
               token: token,
               status: 0
-          }
+            }
           ], function (err, items) {
 
             if (err) throw err;
 
-            // console.log(items);
-
-            console.log("headers.host: ", req.headers.host);
-
-            var message = {
-              "html": "<a href='http://" + req.headers.host + "/verify/" + username + "/" + token + "'>Click to Verify Your Email Address</a>",
-              "text": "Example text content",
-              "subject": "Verify Your Email Address for Stupid Chat App",
-              "from_email": "no-reply@stupidchatapp.com",
-              "from_name": "Stupid Chat App",
-              "to": [{
-                "email": username
-              }],
-              "headers": {
-                "Reply-To": "no-reply@stupidchatapp.com"
-              }
-            };
-           
-            var async = false;
-            var ip_pool = "Main Pool";
-      
-            mandrill_client.messages.send({"message": message, "async": async, "ip_pool": ip_pool}, function(result) {
-                console.log(result);
-                console.log('success!')
-            }, function(e) {
-                // Mandrill returns the error as an object with name and message keys
-                console.log('A mandrill error occurred: ' + e.name + ' - ' + e.message);
-                // A mandrill error occurred: Unknown_Subaccount - No subaccount exists with the id 'customer-123'
-            });
+            send_verification_email(username, token, req);
 
             res.redirect('/');
 
           });
-
-          console.log('Salt: ', salt);
-          console.log('Hash: ', hash);
-          console.log('Username: ', username);
-
-          console.log('Token: ', token);
 
         });
 
@@ -139,6 +105,34 @@ module.exports = function(app, db, passport, mandrill_client, _) {
     });
 
   });
+
+  var send_verification_email = function(username, token, req) {
+    var message = {
+      "html": "<a href='http://" + req.headers.host + "/verify/" + username + "/" + token + "'>Click to Verify Your Email Address</a>",
+      "text": "Example text content",
+      "subject": "Verify Your Email Address for Stupid Chat App",
+      "from_email": "no-reply@stupidchatapp.com",
+      "from_name": "Stupid Chat App",
+      "to": [{
+        "email": username
+      }],
+      "headers": {
+        "Reply-To": "no-reply@stupidchatapp.com"
+      }
+    };
+
+    var async = false;
+    var ip_pool = "Main Pool";
+
+    mandrill_client.messages.send({"message": message, "async": async, "ip_pool": ip_pool}, function(result) {
+        console.log(result);
+        console.log('success!')
+    }, function(e) {
+        // Mandrill returns the error as an object with name and message keys
+        console.log('A mandrill error occurred: ' + e.name + ' - ' + e.message);
+        // A mandrill error occurred: Unknown_Subaccount - No subaccount exists with the id 'customer-123'
+    });
+  }
 
   app.get('/login', function(req, res) {
 
@@ -149,7 +143,7 @@ module.exports = function(app, db, passport, mandrill_client, _) {
   app.post('/login',
 
     passport.authenticate('local', { successRedirect: '/c/chat', failureRedirect: '/login' }),
-    
+
     function(req, res) {
 
       res.redirect('/asdf');
