@@ -35,7 +35,9 @@ function set(app) {
 
   app.get('/signup', function(req, res) {
 
-    res.render('signup', { title: 'Stupid Chat App Signup' });
+    res.render('registration', {
+      title: 'Stupid Chat App Registration'
+    });
 
   });
 }
@@ -83,34 +85,6 @@ function init(app, db) {
     }
 
   ));
-
-  app.post('/users/create', function(req, res) {
-
-    var username = req.body.username,
-      password = req.body.password;
-
-    User.find({ username: username }, function (err, result) {
-
-      if (err) throw err;
-
-      if (result.length > 0) {
-        // username found
-        res.send('Someone has already registered with that email address.');
-
-      } else {
-        var salt = bcrypt.genSaltSync(10);
-        var hash = bcrypt.hashSync(password, salt);
-
-        registration.generate_token(username, function() {
-          console.log('Token generated.');
-          res.redirect('/c/chat');
-        });
-
-      }
-
-    });
-
-  });
 
 };
 

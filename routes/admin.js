@@ -6,7 +6,6 @@ var db = require('./database'),
 function set(app) {
   app.get('/admin', function(req, res) {
 
-
     get_users(function(users) {
 
       res.render('admin', {
@@ -15,7 +14,17 @@ function set(app) {
 
     });
 
+  });
 
+  app.post('/admin/delete/:id', util.ensureAuthenticated, function(req, res) {
+    var id = req.params.id;
+    User.find({id: id}).remove(function(err, user) {
+      if (err) throw err;
+      res.send({
+        'status': 'sucess',
+        'message': user.username + ' has been removed.'
+      })
+    });
   });
 }
 

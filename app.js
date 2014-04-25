@@ -2,6 +2,7 @@ require('newrelic');
 
 var express = require("express")
   , app = express()
+  , flash = require('connect-flash')
   , passport = require('passport')
   , port = process.env.PORT || 5000
   , io = require('socket.io').listen(app.listen(port));
@@ -16,6 +17,16 @@ app.use(express.session({secret: 'secret'}));
 
 app.use(passport.initialize());
 app.use(passport.session());
+
+app.use(flash());
+
+// flash middleware
+app.use(function(req, res, next) {
+  res.locals.error = req.flash('error');
+  res.locals.success = req.flash('success');
+  res.locals.warning = req.flash('warning');
+  next();
+});
 
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');

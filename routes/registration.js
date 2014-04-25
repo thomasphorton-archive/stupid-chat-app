@@ -1,5 +1,7 @@
 var crypto = require('crypto'),
+    bcrypt = require('bcrypt'),
     User = require('../models/user.js'),
+    passport = require('passport'),
     mandrill = require('mandrill-api/mandrill'),
     mandrill_client = new mandrill.Mandrill(process.env.MANDRILL_API_KEY),
     _ = require('../public/js/underscore-min');
@@ -17,6 +19,12 @@ function set(app, db) {
 
   });
 
+  app.get('/test/verification_success', function(req, res) {
+    res.render('index', {
+      success: 'Thank you for verifying your e-mail address. Please log in to continue.'
+    });
+  });
+
   app.get('/verify/:username/:token', function(req, res) {
 
     var username = req.params.username,
@@ -30,7 +38,57 @@ function set(app, db) {
       user.status = 1;
     }).save(function(err) {});
 
-    res.send('Thank you for verifying your e-mail address.');
+    res.render('index', {
+      success: 'Thank you for verifying your e-mail address. Please log in to continue.'
+    });
+
+  });
+
+  app.post('/registration/create', function(req, res) {
+
+    var username = req.body.username,
+      password = req.body.password;
+
+    User.find({ username: username }, function (err, result) {
+
+      if (err) throw err;
+
+      if (result.length > 0) {
+        // username found
+        res.render('registration', {
+          title: 'Registration Error',
+          error: 'Someone has already registered with that email address.'
+        });
+
+      } else {
+        // register user
+        var salt = bcrypt.genSaltSync(10);
+        var hash = bcrypt.hashSync(password, salt);
+
+        User.create({
+          username: username,
+          password: hash,
+          salt: salt,
+          status: 0,
+          displayname: ""
+        }, function(err, user) {
+
+          if (err) {
+            res.render('registration', {
+              error: 'Something went wrong. Please try registering again.'
+            });
+          }
+
+          generate_token(username, function() {
+            req.flash('success', 'Thank you for registering! Please verify your e-mail address to unlock extra features.');
+            req.flash('channel', 'Public Chat');
+            res.redirect('/c/');
+          });
+        })
+
+      }
+
+    });
 
   });
 
@@ -54,6 +112,10 @@ function generate_token(username, cb) {
     });
 
   });
+
+}
+
+function register_user() {
 
 }
 

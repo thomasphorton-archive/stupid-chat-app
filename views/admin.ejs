@@ -6,33 +6,42 @@
     <%- include /partials/head/css.ejs %>
     <%- include /partials/head/js.ejs %>
     <%- include /partials/head/analytics.ejs %>
-
-    <script>
-
+    <script type="text/javascript" charset="utf-8">
+      $(function() {
+        $('.delete-user').click(function() {
+          var id = $(this).data('user-id');
+          var url = '/admin/delete/' + id;
+          $.post(url, function(resp) {
+            console.log(resp);
+          });
+        });
+      });
     </script>
-
   </head>
-
   <body>
+    <div class="container">
+      <h1>Admin</h1>
+      <%- include /partials/alert.ejs %>
+      <div class="row">
+        <table class="table table-hover table-striped">
+          <thead>
+            <th>Username</th>
+            <th>ID</th>
+            <th>Status</th>
+            <th>Delete User</th>
+          </thead>
+          <% for (var i=0; i<users.length; i++) { %>
+            <tr>
+              <td><%= users[i].username %></td>
+              <td><%= users[i].id %></td>
+              <td><%= users[i].status %></td>
+              <td><button class="delete-user btn btn-small btn-warning" data-user-id="<%=users[i].id%>">&times;</button></td>
+            </tr>
+          <% } %>
+        </table>
 
-  <div class="container">
-    <div class="row">
-      <table class="table table-hover table-striped">
-        <thead>
-          <th>Username</th>
-          <th>Status</th>
-        </thead>
-        <% for (var i=0; i<users.length; i++) { %>
-          <tr>
-            <td><%= users[i].username %></td>
-            <td><%= users[i].status %></td>
-          </tr>
-        <% } %>
-      </table>
-
+      </div>
     </div>
-  </div>
-
-  <%- include /partials/footer.ejs %>
+    <%- include /partials/footer.ejs %>
   </body>
 </html>

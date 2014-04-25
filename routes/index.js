@@ -14,8 +14,8 @@ function set(app) {
     res.render("login", {title: 'Login'});
   });
 
-  app.get("/signup", function(req, res) {
-    res.render("signup", {title: 'Sign Up'});
+  app.get("/registration", function(req, res) {
+    res.render("registration", {title: 'Sign Up'});
   });
 
   chat.set(app);
