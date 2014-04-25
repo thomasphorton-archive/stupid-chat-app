@@ -1,6 +1,7 @@
 var chat = require('./chat'),
     user = require('./user'),
     login = require('./login'),
+    admin = require('./admin'),
     registration = require('./registration');
 
 function set(app) {
@@ -20,6 +21,7 @@ function set(app) {
   chat.set(app);
   user.set(app);
   login.set(app);
+  admin.set(app);
   registration.set(app);
 }
 

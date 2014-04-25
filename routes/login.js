@@ -1,4 +1,4 @@
-var db = require('../database'),
+var db = require('./database'),
     User = require('../models/user'),
     registration = require('../routes/registration'),
     mandrill = require('mandrill-api/mandrill'),

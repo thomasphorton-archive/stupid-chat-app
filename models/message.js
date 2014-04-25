@@ -1,4 +1,4 @@
-var db = require('../database');
+var db = require('../routes/database');
 
 module.exports = db.define("messages", {
 

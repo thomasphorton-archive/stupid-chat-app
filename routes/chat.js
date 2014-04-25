@@ -1,4 +1,4 @@
-var db = require('../database'),
+var db = require('./database'),
     moment = require('moment'),
     Message = require('../models/message.js');
     _ = require('../public/js/underscore-min');
