@@ -1,13 +1,46 @@
-var User = require('../models/user'),
+var db = require('../database'),
+    User = require('../models/user'),
     registration = require('../routes/registration'),
-    mandrill = require('mandrill-api/mandrill')
-    mandrill_client = new mandrill.Mandrill(process.env.MANDRILL_API_KEY);
+    mandrill = require('mandrill-api/mandrill'),
+    mandrill_client = new mandrill.Mandrill(process.env.MANDRILL_API_KEY),
+    _ = require('../public/js/underscore-min'),
+    passport = require('passport'),
+    bcrypt = require('bcrypt'),
+    crypto = require('crypto'),
+    LocalStrategy = require('passport-local').Strategy;
 
-module.exports = function(app, db, passport, _) {
+function set(app) {
+  app.get('/login', function(req, res) {
 
-  var bcrypt = require('bcrypt')
-    , crypto = require('crypto')
-    , LocalStrategy = require('passport-local').Strategy;
+    res.render('login', { title: 'Stupid Chat App Login' });
+
+  });
+
+  app.post('/login',
+
+    passport.authenticate('local', { successRedirect: '/c/chat', failureRedirect: '/login' }),
+
+    function(req, res) {
+
+      res.redirect('/asdf');
+
+    }
+
+  );
+
+  app.get('/logout', function(req, res) {
+    req.logout();
+    res.redirect('/');
+  });
+
+  app.get('/signup', function(req, res) {
+
+    res.render('signup', { title: 'Stupid Chat App Signup' });
+
+  });
+}
+
+function init(app, db) {
 
   passport.serializeUser(function(user, done) {
     done(null, user[0].id);
@@ -25,8 +58,6 @@ module.exports = function(app, db, passport, _) {
 
       User.find({ username: username }, function(err, user) {
         if (err) { return done(err); }
-
-        console.log('user: ', user);
 
         if (!user || _.isEmpty(user)) {
 
@@ -69,29 +100,10 @@ module.exports = function(app, db, passport, _) {
       } else {
         var salt = bcrypt.genSaltSync(10);
         var hash = bcrypt.hashSync(password, salt);
-        // var token;
 
-        crypto.randomBytes(48, function(ex, buf) {
-          var token = buf.toString('hex');
-
-          User.create([
-            {
-              username: username,
-              password: hash,
-              salt: salt,
-              token: token,
-              status: 0
-            }
-          ], function (err, items) {
-
-            if (err) throw err;
-
-            registration.send_verification_email(username, token);
-
-            res.redirect('/');
-
-          });
-
+        registration.generate_token(username, function() {
+          console.log('Token generated.');
+          res.redirect('/c/chat');
         });
 
       }
@@ -100,33 +112,9 @@ module.exports = function(app, db, passport, _) {
 
   });
 
-  app.get('/login', function(req, res) {
-
-    res.render('login', { title: 'Stupid Chat App Login' });
-
-  });
-
-  app.post('/login',
-
-    passport.authenticate('local', { successRedirect: '/c/chat', failureRedirect: '/login' }),
-
-    function(req, res) {
-
-      res.redirect('/asdf');
-
-    }
-
-  );
-
-  app.get('/logout', function(req, res) {
-    req.logout();
-    res.redirect('/');
-  });
-
-  app.get('/signup', function(req, res) {
-
-    res.render('signup', { title: 'Stupid Chat App Signup' });
-
-  });
-
 };
+
+module.exports = {
+  set: set,
+  init: init
+}

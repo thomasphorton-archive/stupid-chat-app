@@ -2,29 +2,14 @@
 <html>
   <head>
     <title>Chat With Friends</title>
-    <link rel='stylesheet' href='/css/bootstrap.min.css'/>
-    <link rel='stylesheet' href='/css/fontello.css'/>
-    <link rel='stylesheet' href='/css/style.css'/>
-    <script src='/js/jquery-2.10.0-min.js'></script>
-    <script src='/js/bootstrap.min.js'></script>
-    <script src='/js/underscore-min.js'></script>
-    <script src='/js/backbone-min.js'></script>
     <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
-
-    <script>
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-      ga('create', 'UA-28026409-2', 'stupidchatapp.herokuapp.com');
-      ga('send', 'pageview');
-
-    </script>
+    <%- include /partials/head/css.ejs %>
+    <%- include /partials/head/js.ejs %>
+    <%- include /partials/head/analytics.ejs %>
 
     <script>
     $(function() {
-    
+
       var signin_form = $('#signin-form'),
           user_signin = $('.user-signin'),
           user_register = $('.user-register');
@@ -39,7 +24,7 @@
     </script>
 
   </head>
-        
+
   <body>
 
   <a href="https://github.com/thomasphorton"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
@@ -55,7 +40,7 @@
         <h2>Sign In</h2>
 
       <form method="post" action="/login" id="signin-form">
-        
+
         <div class="form-group">
           <input type="email" class="form-control" placeholder="email address" name="username" required>
         </div>
@@ -111,7 +96,7 @@
         </tbody>
       </table>
     </div>
-  </div> 
-
+  </div>
+  <%- include /partials/footer.ejs %>
   </body>
 </html>

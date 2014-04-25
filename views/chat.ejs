@@ -2,83 +2,20 @@
 <html>
   <head>
     <title>Chat With Friends</title>
-    <link rel='stylesheet' href='/css/bootstrap.min.css'/>
-    <link rel='stylesheet' href='/css/fontello.css'/>
-    <link rel='stylesheet' href='/css/style.css'/>
-    <script src='/js/jquery-2.10.0-min.js'></script>
-    <script src='/js/bootstrap.min.js'></script>
-    <script src='/js/underscore-min.js'></script>
-    <script src='/js/backbone-min.js'></script>
-    <script src='/socket.io/socket.io.js'></script>
-
-    <script data-main="/js/main" src="/js/require-min.js"></script>
-
     <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
-
+    <%- include /partials/head/css.ejs %>
+    <%- include /partials/head/js.ejs %>
+    <%- include /partials/head/analytics.ejs %>
+    <script src='/socket.io/socket.io.js'></script>
+    <script data-main="/js/main" src="/js/require-min.js"></script>
     <script>
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-      ga('create', 'UA-28026409-2', 'stupidchatapp.herokuapp.com');
-      ga('send', 'pageview');
-
-    </script>
-
-    <script src="//connect.soundcloud.com/sdk.js"></script>
-    <script>
-      SC.initialize({
-        client_id: "264411b4a52b43719dc678fc6d24f8c9",
-        redirect_uri: "http://stupidchatapp.herokuapp.com",
-      });
-
-      var channel = "<%= channel %>" || "Public Chat";
-
-      var user = <%- JSON.stringify(user) %>;
-
-      console.log('user: ', user);
-
-      // $(function() {
-
-      //   SC.oEmbed("http://soundcloud.com/forss/flickermood", {auto_play: false}, function(oembed){
-
-      //     $('#player').html(oembed.html);
-      //   });
-                                                                                                                                                                              
-      // })
+      window.channel = "<%= channel %>" || "Public Chat";
     </script>
   </head>
-        
+
   <body>
 
-    <header class="navbar">
-      <div class="container">
-        <div class="navbar-header">
-          <a href="/" class="navbar-brand">Chat With Friends</a>
-          
-         <div class="btn-group pull-right user-buttons">
-          <% if (user) { %>
-          <button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-wrench"></span></button>
-          <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-            <span class="caret"></span>
-            <span class="sr-only">Toggle Dropdown</span>
-          </button>
-          <ul class="dropdown-menu" role="menu">
-            <li><a href="/u">Account Settings</a></li>
-            <li class="divider"></li>
-            <li><a href="/logout">Log Out</a></li>
-          </ul>
-        
-          <% } else { %>
-          <a type="button" class="btn btn-info" href="/login">Log In</a>
-            
-          <% } %>
-          </div>
-          
-        </div>
-      </div>
-    </header>
+    <%- include /partials/header.ejs %>
 
     <div class="container">
 
@@ -90,8 +27,8 @@
           <h2 class="channel-name"></h2>
           <p><span class="users-online">1 user</span> online</p>
         </div>
-       
       </div>
+
       <div class="row">
         <div class="controls col-md-12">
 
@@ -100,7 +37,7 @@
             <button type="button" class="close name-clear" aria-hidden"true">&times;</button>
             <input id="name" class="form-control" />
           </div>
-          
+
           <div class="form-group">
             <label for="field">Message</label>
 
@@ -116,7 +53,7 @@
             </ul>
 
             <div class="tab-content post-type-tabs">
-              
+
               <div class="tab-pane active" id="post-text-pane" data-type="text">
                 <div class="form-group">
                   <textarea id="post-text-field" class="form-control message-field" placeholder="Enter a message"></textarea>
@@ -147,14 +84,14 @@
               <% } %>
 
             </div>
-            
+
           </div>
 
         </div>
 
       </div>
-  
-    </div>
 
+    </div>
+  <%- include /partials/footer.ejs %>
   </body>
 </html>

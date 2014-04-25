@@ -1,0 +1,28 @@
+<header class="navbar">
+  <div class="container">
+    <div class="navbar-header">
+      <% if (user) { %>
+      <a href="/c/" class="navbar-brand">Chat With Friends</a>
+      <div class="btn-group pull-right user-buttons">
+        <button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-wrench"></span></button>
+        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+          <span class="caret"></span>
+          <span class="sr-only">Toggle Dropdown</span>
+        </button>
+        <ul class="dropdown-menu" role="menu">
+          <li><a href="/u">Account Settings</a></li>
+          <li class="divider"></li>
+          <li><a href="/logout">Log Out</a></li>
+        </ul>
+      </div>
+
+      <% } else { %>
+      <a href="/" class="navbar-brand">Chat With Friends</a>
+      <div class="btn-group pull-right user-buttons">
+        <a type="button" class="btn btn-info" href="/login">Log In</a>
+      </div>
+      <% } %>
+
+    </div>
+  </div>
+</header>

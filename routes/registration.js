@@ -2,31 +2,17 @@ var crypto = require('crypto'),
     User = require('../models/user.js'),
     mandrill = require('mandrill-api/mandrill'),
     mandrill_client = new mandrill.Mandrill(process.env.MANDRILL_API_KEY),
-    _module = this;
+    _ = require('../public/js/underscore-min');
 
-module.exports = function(app, db, _) {
+function set(app, db) {
 
-  app.post('/send_verification', function(req, res) {
+  app.get('/send_verification/:username', function(req, res) {
 
-    var username = request.body.user.username;
+    var username = req.params.username;
 
-    crypto.randomBytes(48, function(ex, buf) {
-      var token = buf.toString('hex');
-
-      User.find({
-          username: username
-      }).each(function (err, user) {
-
-        if (err) throw err;
-
-        _module.send_verification_email(username, token);
-
-        res.redirect('/');
-
-      }).save(function(err) {
-        console.log('token generated and updated');
-      });
-
+    generate_token(username, function() {
+      console.log('Token generated.');
+      res.redirect('/c/chat');
     });
 
   });
@@ -50,7 +36,28 @@ module.exports = function(app, db, _) {
 
 }
 
-module.exports.send_verification_email = function(username, token) {
+function generate_token(username, cb) {
+
+  crypto.randomBytes(48, function(ex, buf) {
+    var token = buf.toString('hex');
+
+    User.find({
+        username: username
+    }).each(function (user, err) {
+
+      if (err) throw err;
+
+      send_verification_email(username, token);
+
+    }).save(function(err) {
+      if (typeof(cb) === 'function') cb();
+    });
+
+  });
+
+}
+
+function send_verification_email(username, token) {
   var message = {
     "html": "<a href='http://stupidchatapp.herokuapp.com/verify/" + username + "/" + token + "'>Click to Verify Your Email Address</a>",
     "text": "Example text content",
@@ -77,3 +84,9 @@ module.exports.send_verification_email = function(username, token) {
       // A mandrill error occurred: Unknown_Subaccount - No subaccount exists with the id 'customer-123'
   });
 }
+
+module.exports = {
+  set: set,
+  generate_token: generate_token,
+  send_verification_email: send_verification_email
+};

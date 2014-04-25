@@ -33,6 +33,13 @@
   margin-top: 15px;
 }
 
+footer {
+  margin-top: 3em;
+  border-top: 1px solid #EEE;
+  padding: 1em 0;
+  text-align: center;
+}
+
 @media
     only screen and (max-device-width: 1136px) and (min-device-width: 960px) and (max-device-height: 640px) and (min-device-height: 560px),
     only screen and (max-device-height: 1136px) and (min-device-height: 960px) and (max-device-width: 640px) and (min-device-width: 560px) {

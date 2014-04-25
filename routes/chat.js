@@ -3,7 +3,7 @@ var db = require('../database'),
     Message = require('../models/message.js');
     _ = require('../public/js/underscore-min');
 
-module.exports.set = function(app) {
+function set(app) {
 
   app.get("/c/:channel", function(req, res){
 
@@ -49,7 +49,7 @@ module.exports.set = function(app) {
 
 }
 
-module.exports.init = function(io) {
+function init(io) {
 
   var users_online = 0;
 
@@ -136,6 +136,12 @@ module.exports.init = function(io) {
 
 }
 
-module.exports.test = function() {
+function test() {
   console.log('*** TEST ***');
+}
+
+module.exports = {
+  set: set,
+  init: init,
+  test: test
 }

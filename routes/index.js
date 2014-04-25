@@ -1,6 +1,9 @@
-var chat = require('./chat');
+var chat = require('./chat'),
+    user = require('./user'),
+    login = require('./login'),
+    registration = require('./registration');
 
-module.exports.set = function(app) {
+function set(app) {
 
   app.get('/', function(req, res) {
     res.render("index");
@@ -15,5 +18,11 @@ module.exports.set = function(app) {
   });
 
   chat.set(app);
+  user.set(app);
+  login.set(app);
+  registration.set(app);
+}
 
+module.exports = {
+  set: set
 }

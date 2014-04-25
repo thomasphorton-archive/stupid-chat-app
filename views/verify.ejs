@@ -2,13 +2,10 @@
 <html>
   <head>
     <title><%= title %></title>
-    <link rel='stylesheet' href='/css/bootstrap.min.css'/>
-    <link rel='stylesheet' href='/css/style.css'/>
-    <script src='/js/jquery-2.10.0-min.js'></script>
-    <script src='/js/bootstrap.min.js'></script>
-    <script src='/js/underscore-min.js'></script>
-    <script src='/js/backbone-min.js'></script>
     <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <%- include /partials/head/css.ejs %>
+    <%- include /partials/head/js.ejs %>
+    <%- include /partials/head/analytics.ejs %>
   </head>
   <body>
     <header class="navbar">
@@ -25,9 +22,9 @@
 
       <p>Don't want to verify your account right now? <a href="/c/chat?guest=true">Continue as a Guest</a></p>
 
-      <p><a href="#" class="btn btn-primary">Resend verification email</a></p>
+      <p><a href="/send_verification/<%= encodeURIComponent(user.username) %>" class="btn btn-primary">Resend verification email</a></p>
 
     </div>
-
+    <%- include /partials/footer.ejs %>
   </body>
 </html>
