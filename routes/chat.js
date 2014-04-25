@@ -7,43 +7,13 @@ function set(app) {
 
   app.get("/c/:channel", function(req, res){
 
-    var channel = req.params.channel.toLowerCase();
-
-    if (req.query.guest === 'true') {
-      req.logout();
-    }
-
-    if (req.user) {
-
-      user = _.pick(req.user[0], 'username', 'status');
-
-      if (user.status === 0) {
-        // registered but unverified
-
-        res.render("verify", {title: 'Verify Your Email Address', user: user});
-
-      } else {
-
-        res.render("chat", {channel: channel, user: user});
-      }
-
-    } else {
-
-      res.render("chat", {channel: channel, user: null});
-
-    }
+    render_chat(req, res);
 
   });
 
-  app.get("/c/", function(req, res){
+  app.get("/c/", function(req, res) {
 
-    if (req.user) {
-      user = _.pick(req.user[0], 'username', 'status');
-    } else {
-      user = null;
-    }
-
-    res.render("chat", {channel: 'Public Chat', user: user});
+    render_chat(req, res);
 
   });
 
@@ -137,12 +107,41 @@ function init(io) {
 
 }
 
-function test() {
-  console.log('*** TEST ***');
+function render_chat(req, res) {
+  var channel,
+      user = null,
+      warning = null;
+
+  if (req.params.channel) {
+    channel = req.params.channel.toLowerCase();
+  } else {
+    channel = 'Public Chat';
+  }
+
+  if (req.query.guest === 'true') {
+    req.logout();
+  }
+
+  if (req.user) {
+
+    user = _.pick(req.user[0], 'username', 'status');
+
+    if (user.status === 0) {
+      // registered but unverified
+      warning = "<p><b>Hey!</b> You haven't verified your account yet! <a href='/u' class='alert-link'>Verify your acccount in the control panel</a></p>";
+
+    }
+
+  }
+
+  res.render("chat", {
+    channel: channel,
+    user: user,
+    warning: warning
+  });
 }
 
 module.exports = {
   set: set,
-  init: init,
-  test: test
+  init: init
 }

@@ -17,6 +17,19 @@
 
     <%- include /partials/header.ejs %>
 
+    <% if (warning) { %>
+
+    <div class="container">
+      <div class="row">
+        <div class="alert alert-warning alert-dismissable">
+          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+          <%- warning %>
+        </div>
+      </div>
+    </div>
+
+    <% } %>
+
     <div class="container">
 
       <div class="row">
@@ -44,7 +57,7 @@
             <ul class="nav nav-tabs post-type-nav">
               <li class="active"><a href="#post-text-pane" data-toggle="tab"><i class="icon-comment-alt"></i></a></li>
 
-              <% if (user) { %>
+              <% if (user && user.status > 0) { %>
 
               <li><a href="#post-link-pane" data-toggle="tab"><i class="icon-link"></i></a></li>
               <li><a href="#post-image-pane" data-toggle="tab"><i class="icon-picture"></i></a></li>
@@ -62,7 +75,7 @@
                   <button id="post-text" data-type="text" class="btn btn-default btn-lg btn-success post-message">Send</button>
                 </div>
               </div>
-              <% if (user) { %>
+              <% if (user && user.status > 0) { %>
               <div class="tab-pane" id="post-link-pane" data-type="link">
                 <div class="form-group">
                   <textarea id="post-link-field" class="form-control message-field" placeholder="Share a link (please include http://)."></textarea>
