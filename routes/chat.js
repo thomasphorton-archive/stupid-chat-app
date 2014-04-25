@@ -68,7 +68,8 @@ function init(io) {
 
       if (channel === "") channel = "Public Chat";
 
-      Message.find({channel: channel}, function (err, result) {
+      // Find messages in current channel, sorted by timestamp.
+      Message.find({channel: channel}, "timestamp", function (err, result) {
 
         if (err) throw err;
 
