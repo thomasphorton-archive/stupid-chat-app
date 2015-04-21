@@ -11,9 +11,10 @@ chat
 * `git clone git@github.com:thomasphorton/chat.git`
 * `cd chat`
 * `npm install`
-* Create `/.env` file based off of `/.env.example`.
+* `cp ./config/development.json.example ./config/development.json`
+* Edit `./development.json`
 * `node schema-build.js`
-* `foreman start`
+* `node app.js`
 
 TODO:
 Check out issues for ideas.
