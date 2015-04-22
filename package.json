@@ -21,7 +21,8 @@
     "passport-local": "~0.1.6",
     "pg": "2.x",
     "socket.io": "*",
-    "minimist": "^1.1.1"
+    "minimist": "^1.1.1",
+    "bcrypt": "^0.8.2"
   },
   "engines": {
     "node": "0.10.x"
