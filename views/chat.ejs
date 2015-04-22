@@ -41,15 +41,11 @@
 
           <div class="form-group">
             <label for="field">Message</label>
-
             <ul class="nav nav-tabs post-type-nav">
               <li class="active"><a href="#post-text-pane" data-toggle="tab"><i class="icon-comment-alt"></i></a></li>
-
               <% if (user && user.status > 0) { %>
-
               <li><a href="#post-link-pane" data-toggle="tab"><i class="icon-link"></i></a></li>
               <li><a href="#post-image-pane" data-toggle="tab"><i class="icon-picture"></i></a></li>
-
               <% } %>
             </ul>
 
@@ -64,34 +60,28 @@
                 </div>
               </div>
               <% if (user && user.status > 0) { %>
-              <div class="tab-pane" id="post-link-pane" data-type="link">
-                <div class="form-group">
-                  <textarea id="post-link-field" class="form-control message-field" placeholder="Share a link (please include http://)."></textarea>
+                <div class="tab-pane" id="post-link-pane" data-type="link">
+                  <div class="form-group">
+                    <textarea id="post-link-field" class="form-control message-field" placeholder="Share a link (please include http://)."></textarea>
+                  </div>
+                  <div class="form-group">
+                    <button id="post-link" data-type="link" class="btn btn-default btn-lg btn-success post-message">Send</button>
+                  </div>
                 </div>
-                <div class="form-group">
-                  <button id="post-link" data-type="link" class="btn btn-default btn-lg btn-success post-message">Send</button>
-                </div>
-              </div>
 
-              <div class="tab-pane" id="post-image-pane" data-type="image">
-                <div class="form-group">
-                  <textarea id="post-image-field" class="form-control message-field" placeholder="Share an image (please include http://)."></textarea>
+                <div class="tab-pane" id="post-image-pane" data-type="image">
+                  <div class="form-group">
+                    <textarea id="post-image-field" class="form-control message-field" placeholder="Share an image (please include http://)."></textarea>
+                  </div>
+                  <div class="form-group">
+                    <button id="post-image" data-type="image" class="btn btn-default btn-lg btn-success post-message">Send</button>
+                  </div>
                 </div>
-                <div class="form-group">
-                  <button id="post-image" data-type="image" class="btn btn-default btn-lg btn-success post-message">Send</button>
-                </div>
-              </div>
-
               <% } %>
-
             </div>
-
           </div>
-
         </div>
-
       </div>
-
     </div>
   <%- include /partials/footer.ejs %>
   </body>

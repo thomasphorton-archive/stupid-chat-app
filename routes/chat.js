@@ -6,32 +6,24 @@ var db = require('./database'),
 function set(app) {
 
   app.get("/c/:channel", function(req, res){
-
     render_chat(req, res);
-
   });
 
   app.get("/c/", function(req, res) {
-
     render_chat(req, res);
-
   });
 
 }
 
 function init(io) {
-
   var users_online = 0;
 
   io.sockets.on('connection', function (socket) {
-
     users_online++;
-
     io.sockets.emit('update_users', users_online);
 
     socket.on('channel', function(channel) {
-
-      if(socket.channel) {
+      if (socket.channel) {
         socket.leave(socket.channel);
       }
       socket.join(channel);
@@ -40,13 +32,9 @@ function init(io) {
 
       // Find messages in current channel, sorted by timestamp.
       Message.find({channel: channel}, "timestamp", function (err, result) {
-
         if (err) throw err;
-
         _.each(result, function(message) {
-
           var now = moment().unix();
-
           if (now - message.timestamp > 86400) {
             // Remove messages older than 1 day
             Message.find({id: message.id}).remove(function(err) {
@@ -62,28 +50,20 @@ function init(io) {
               timestamp: message.timestamp
             });
           }
-
         });
-
       });
-
     });
 
     socket.on('disconnect', function() {
-
       users_online--;
-
       io.sockets.emit('update_users', users_online);
-
     });
 
     socket.on('send', function (data) {
-
       var channel = data.channel || "Public Chat",
           now = moment().unix();
 
       io.sockets.in(channel).emit('message', data);
-
       Message.create([
         {
           name: data.username,
@@ -92,13 +72,9 @@ function init(io) {
           channel: channel,
           timestamp: now
         }], function (err, items) {
-
         if (err) throw err;
-
       });
-
     });
-
   });
 
   return {
@@ -123,15 +99,12 @@ function render_chat(req, res) {
   }
 
   if (req.user) {
-
     user = _.pick(req.user[0], 'username', 'status');
-
     if (user.status === 0) {
+
       // registered but unverified
       warning = "<p><b>Hey!</b> You haven't verified your account yet! <a href='/u' class='alert-link'>Verify your acccount in the control panel</a></p>";
-
     }
-
   }
 
   res.render("chat", {

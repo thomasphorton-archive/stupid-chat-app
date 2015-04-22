@@ -1,3 +1,5 @@
 {
-  "database_connection_string": "postgresql://<username>@localhost:5432/<username>"
+  "hostname": "localhost:5000",
+  "database_connection_string": "postgresql://<username>@localhost:5432/<username>",
+  "mandrill_api_key": "<mandrill api key>"
 }

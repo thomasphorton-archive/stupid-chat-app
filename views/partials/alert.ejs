@@ -1,4 +1,4 @@
-<% if (typeof success !== 'undefined' && success != '') { %>
+<% if (typeof success !== 'undefined' && success != '' && success != null) { %>
 
 <div class="container">
   <div class="row">
@@ -13,7 +13,7 @@
 
 <% } %>
 
-<% if (typeof error !== 'undefined' && error != '') { %>
+<% if (typeof error !== 'undefined' && error != '' && error != null) { %>
 
 <div class="container">
   <div class="row">
@@ -28,7 +28,7 @@
 
 <% } %>
 
-<% if (typeof warning !== 'undefined' && warning != '') { %>
+<% if (typeof warning !== 'undefined' && warning != '' && warning != null) { %>
 
 <div class="container">
   <div class="row">

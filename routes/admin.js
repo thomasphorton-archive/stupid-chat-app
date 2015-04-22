@@ -5,15 +5,11 @@ var db = require('./database'),
 
 function set(app) {
   app.get('/admin', function(req, res) {
-
     get_users(function(users) {
-
       res.render('admin', {
         users: users
       });
-
     });
-
   });
 
   app.post('/admin/delete/:id', util.ensureAuthenticated, function(req, res) {
@@ -29,13 +25,9 @@ function set(app) {
 }
 
 function get_users(cb) {
-
   User.find({}, function(err, users) {
-
     cb(users);
-
   });
-
 }
 
 module.exports = {

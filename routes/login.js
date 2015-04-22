@@ -11,21 +11,14 @@ var db = require('./database'),
 
 function set(app) {
   app.get('/login', function(req, res) {
-
     res.render('login', { title: 'Stupid Chat App Login' });
-
   });
 
   app.post('/login',
-
     passport.authenticate('local', { successRedirect: '/c/chat', failureRedirect: '/login' }),
-
     function(req, res) {
-
       res.redirect('/asdf');
-
     }
-
   );
 
   app.get('/logout', function(req, res) {
@@ -34,16 +27,13 @@ function set(app) {
   });
 
   app.get('/signup', function(req, res) {
-
     res.render('registration', {
       title: 'Stupid Chat App Registration'
     });
-
   });
 }
 
 function init(app, db) {
-
   passport.serializeUser(function(user, done) {
     done(null, user[0].id);
   });
@@ -55,37 +45,26 @@ function init(app, db) {
   });
 
   passport.use(new LocalStrategy(
-
     function(username, password, done) {
-
       User.find({ username: username }, function(err, user) {
         if (err) { return done(err); }
-
         if (!user || _.isEmpty(user)) {
-
           return done(null, false, { message: 'Incorrect username.' });
-
         }
 
         var storedPass = user[0].password || 'nopasswordsupplied',
           salt = user[0].salt || 'nosaltsupplied';
 
-          bcrypt.hash(password, salt, function(err, hash) {
-
-            if (storedPass === hash) {
-              return done(null, user);
-            } else {
-              return done(null, false, { message: 'Incorrect password.' });
-            }
-
-          });
-
+        bcrypt.hash(password, salt, function(err, hash) {
+          if (storedPass === hash) {
+            return done(null, user);
+          } else {
+            return done(null, false, { message: 'Incorrect password.' });
+          }
+        });
       });
-
     }
-
   ));
-
 };
 
 module.exports = {
