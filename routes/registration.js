@@ -12,24 +12,15 @@ function set(app, db) {
   app.get('/send_verification/:username', function(req, res) {
     var username = req.params.username;
     generate_token(username, function() {
-      console.log('Token generated.');
       res.redirect('/c/chat');
-    });
-  });
-
-  app.get('/test/verification_success', function(req, res) {
-    res.render('index', {
-      success: 'Thank you for verifying your e-mail address. Please log in to continue.'
     });
   });
 
   app.get('/verify/:username/:token', function(req, res) {
     var username = req.params.username,
         token = req.params.token;
-
     User.find({
-      username: username,
-      token: token
+      username: username
     }).each(function(user) {
       user.token = '';
       user.status = 1;
@@ -93,15 +84,12 @@ function generate_token(username, cb) {
       username: username
     }).each(function (user, err) {
       if (err) throw err;
+      user.token = token;
       send_verification_email(username, token);
     }).save(function(err) {
       if (typeof(cb) === 'function') cb();
     });
   });
-}
-
-function register_user() {
-
 }
 
 function send_verification_email(username, token) {
@@ -122,12 +110,10 @@ function send_verification_email(username, token) {
   var async = false;
   var ip_pool = "Main Pool";
 
-  mandrill_client.messages.send({"message": message, "async": async, "ip_pool": ip_pool}, function(result) {
-      console.log(result);
-      console.log('success!')
-  }, function(e) {
-      // Mandrill returns the error as an object with name and message keys
-      console.log('A mandrill error occurred: ' + e.name + ' - ' + e.message);
+  mandrill_client.messages.send({"message": message, "async": async, "ip_pool": ip_pool}, function(result) {}, function(e) {
+
+    // Mandrill returns the error as an object with name and message keys
+    console.log('A mandrill error occurred: ' + e.name + ' - ' + e.message);
   });
 }
 

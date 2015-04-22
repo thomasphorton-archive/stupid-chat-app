@@ -6,30 +6,18 @@
     <%- include /partials/head/css.ejs %>
     <%- include /partials/head/js.ejs %>
     <%- include /partials/head/analytics.ejs %>
-
-    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
-
   </head>
-
   <body>
-
     <%- include /partials/header.ejs %>
-
     <div class="container">
-
       <form method="post" action="/user/preferences">
-
         <div class="form-group">
           <input type="text" class="form-control" placeholder="display name" name="displayname" id="displayname">
         </div>
-
         <div class="form-group">
           <button type="submit" class="btn btn-default">Save Preferences</button>
         </div>
-
       </form>
-
-
     </div>
     <%- include /partials/footer.ejs %>
   </body>
