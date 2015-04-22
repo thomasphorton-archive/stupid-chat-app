@@ -4,7 +4,7 @@
       <% if (user) { %>
         <a href="/c/" class="navbar-brand">Chat With Friends</a>
         <div class="btn-group pull-right user-buttons">
-          <button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-wrench"></span></button>
+          <button type="button" class="btn btn-primary"><%= user.username %></button>
           <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
             <span class="caret"></span>
             <span class="sr-only">Toggle Dropdown</span>

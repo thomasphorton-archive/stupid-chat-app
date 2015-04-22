@@ -1,16 +1,10 @@
 requirejs.config({
   baseUrl: '/js',
   paths: {
-    jquery: 'jquery-2.10.0-min',
-    underscore: 'underscore-min',
-    backbone: 'backbone-min',
-    bootstrap: 'bootstrap',
+    jquery: 'lib/jquery-2.10.0-min',
+    bootstrap: 'lib/bootstrap',
     chat: 'chat'
   }
-
 });
 
-requirejs(['chat'],
-  function (chat) {
-    
-  });
+requirejs(['chat']);

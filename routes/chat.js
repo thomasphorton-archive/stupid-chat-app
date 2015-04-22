@@ -1,7 +1,7 @@
 var db = require('./database'),
     moment = require('moment'),
     Message = require('../models/message.js');
-    _ = require('../public/js/underscore-min');
+    _ = require('../public/js/lib/lodash');
 
 function set(app) {
   app.get("/c/:channel", function(req, res){

@@ -1,162 +1,149 @@
-$(function() {
+;(function($) {
+  var Chat = function() {
+    var Chat = {
+      defaults: {
+        chatSelector: '#chat',
+        nameSelector: '#name',
+        usersOnlineSelector: '.users-online',
+        messageFieldSelector: '.message-field',
+        sendButtonSelector: '.btn-send-message'
+      },
 
-  var message_field = $('.message-field'),
-    send = $('#send'),
-    $chat = $('#chat'),
-    name = $('#name'),
-    post_message = $('.post-message'),
-    post_type_nav = $('.post-type-nav'),
-    titleInterval;
+      // Initialization
+      init: function(options) {
+        this.settings = $.extend({}, this.defaults, options);
+        this.unreadMessages = 0;
+        this.chatElem = $(this.settings.chatSelector);
+        this.nameElem = $(this.settings.nameSelector);
+        this.usersOnlineElem = $(this.settings.usersOnlineSelector);
+        this.messageFieldElem = $(this.settings.messageFieldSelector);
+        this.sendButtonElem = $(this.settings.sendButtonSelector);
+        this.setEventListeners();
+        this.initializeSocket();
+      },
 
-  $(window).focus(function() {
-    chat.unreadMessages = 0;
-    document.title = channel + ' - Chat With Friends';
-    clearInterval(titleInterval);
-  });
+      // UI Listeners
+      setEventListeners: function() {
+        var that = this;
 
-  var chat = {
-    unreadMessages: 0,
-    message_type: 'text',
-    safe_for_work_mode: false
-  }
+        $(window).focus(function() {
+          that.unreadMessages = 0;
+          document.title = channel + ' - Chat With Friends';
+          clearInterval(that.titleInterval);
+        });
 
-  var message_type_button = $('.message-type button');
+        this.sendButtonElem.click(function() {
+          that.sendMessage();
+        });
 
-  message_type_button.click(function() {
-    chat.message_type = $(this).data('value');
-  });
-
-  var socket = io.connect();
-
-  socket.on('connect', function() {
-    socket.emit('channel', channel);
-  });
-
-  socket.on('message', function (data) {
-
-    if (data.message) {
-      clearInterval(titleInterval);
-      if (document.hasFocus()) {
-      } else {
-        var i = 0;
-        chat.unreadMessages++;
-        titleInterval = setInterval( function() {
-          if (i % 2 === 0) {
-            document.title = '(' + chat.unreadMessages + ') ' + channel + ' - Chat With Friends';
-          } else {
-            document.title = channel + ' - Chat With Friends';
+        this.messageFieldElem.keyup(function(e) {
+          if (e.keyCode === 13) {
+            that.sendMessage();
           }
-          i++;
-        }, 500);
-      }
+        });
 
-      if (data.type === 'image') {
-        if (chat.safe_for_work_mode) {
-          $chat.append(linkTemplate({data: data}));
+        this.nameElem.blur(function() {
+          var $this = $(this);
+          $this.attr('disabled', 'disabled');
+          $this.parent().hide();
+        });
+      },
+
+      // Set socket listeners
+      initializeSocket: function() {
+        var that = this;
+        var socket = io.connect();
+
+        socket.on('connect', function() {
+          socket.emit('channel', channel);
+        });
+
+        socket.on('message', function(data) {
+          that.renderMessage(data);
+        });
+
+        socket.on('update_users', function(data) {
+          that.updateUserCount(data);
+        });
+
+        this.socket = socket;
+      },
+
+      // Display messages
+      renderMessage: function(data) {
+        var that = this;
+
+        if (data.message) {
+          clearInterval(this.titleInterval);
+          if (!document.hasFocus()) {
+            var i = 0;
+            this.unreadMessages++;
+            this.titleInterval = setInterval( function() {
+              if (i % 2 === 0) {
+                document.title = '(' + that.unreadMessages + ') ' + channel + ' - Chat With Friends';
+              } else {
+                document.title = channel + ' - Chat With Friends';
+              }
+              i++;
+            }, 500);
+          }
+
+          this.chatElem.append(this.templates.message({data: data}));
+          this.chatElem.scrollTop(this.chatElem[0].scrollHeight);
         } else {
-          $chat.append(imageTemplate({data: data}));
+          console.log("There is a problem:", data);
         }
-      } else if (data.type === 'video') {
-        if (chat.safe_for_work_mode) {
-          $chat.append(linkTemplate({data: data}));
+      },
+
+      // Send messages to the server
+      sendMessage: function() {
+        var data = {
+          message: this.messageFieldElem.val(),
+          username: this.nameElem.val()
+        }
+
+        if (data.message === '' || data.username === '') {
+          console.log('Bad message: ', data);
+          return;
+        }
+
+        this.socket.emit('send', {
+          message: data.message,
+          type: 'text',
+          username: data.username,
+          channel: channel
+        });
+
+        ga('send', 'event', 'message', channel + ' ' + data.username, data.message);
+
+        this.messageFieldElem.val('');
+      },
+
+      // Update active user count
+      updateUserCount: function(data) {
+        var text;
+        if (data === 1) {
+          text = '1 user';
         } else {
-          $chat.append(videoTemplate({data: data}));
+          text = data + ' users';
         }
-      } else if (data.type === 'link') {
-        $chat.append(linkTemplate({data: data}));
-      } else {
-        $chat.append(messageTemplate({data: data}));
-      }
-      $chat.scrollTop($chat[0].scrollHeight);
-    } else {
-      console.log("There is a problem:", data);
-    }
-  });
+        this.usersOnlineElem.text(text);
+      },
 
-  socket.on('popular', function(channels) {
-    var popularChannels = $('.popular-channels');
-    popularChannels.html("");
-    _.each(channels, function(data) {
-      var name = data.channel;
-      channelID = data.channel.toLowerCase();
-      if (channelID == "public chat") {
-        channelID = "";
-        url = "/";
-      } else {
-        url = encodeURI(channelID);
+      // Templates for rendering partials
+      templates: {
+        message: _.template("<p><b><%- data.username %></b>: <%- data.message %></p>")
       }
 
-      var obj = {
-        name: name,
-        url: url,
-        count: data.count
-      }
+    };
 
-      popularChannels.append(_.template(popularTemplate({channel: obj})));
-    });
-  });
-
-  socket.on('update_users', function(data) {
-    var text;
-    if (data === 1) {
-      text = '1 user';
-    } else {
-      text = data + ' users';
-    }
-    $('.users-online').text(text);
-  });
-
-  post_message.click(function() {
-    chat.message_type = $(this).data('type');
-    sendMessage();
-  });
-
-  post_type_nav.click(function() {
-    chat.message_type = $(this).data('type');
-  });
-
-  message_field.keyup(function(e) {
-    if (e.keyCode === 13) {
-      chat.message_type = $(this).parent().parent().data('type');
-      sendMessage();
-    }
-  });
-
-  name.blur(function() {
-    $(this).attr('disabled', 'disabled');
-    $(this).parent().hide();
-  });
-
-  $('.name-clear').click(function() {
-    name.removeAttr("disabled").val("");
-  });
-
-  function sendMessage() {
-    if(name.val() === "") {
-      alert("Please type your name!");
-    } else {
-      var text = $('#post-' + chat.message_type + '-field').val(),
-        username = name.val();
-      ga('send', 'event', 'message', channel + ' ' + username, text);
-
-      socket.emit('send', {
-        message: text,
-        type: chat.message_type,
-        username: username,
-        channel: channel
-      });
-      message_field.val("");
-    }
+    return Chat;
   }
 
-});
+  var chat = new Chat();
 
-var messageTemplate = _.template("<p><b><%- data.username %></b>: <%- data.message %></p>");
-
-var imageTemplate = _.template("<p><b><%- data.username %></b>: <img src='<%- data.message %>' /></p>");
-
-var videoTemplate = _.template("<p><b><%- data.username %></b>: <iframe src=\"//www.youtube.com/embed/<%- data.message %>\" frameborder=\"0\" allowfullscreen></iframe></p>");
-
-var linkTemplate = _.template("<p><b><%- data.username %></b>: <a href='<%- data.message %>' target='_blank'><%- data.message %></a></p>");
-
-var popularTemplate = _.template("<li><a href='<%- channel.name %>' target='_blank'><%- channel.name %> (<%- channel.count %>)</a></li>");
+  $(document).ready(function() {
+    chat.init();
+  });
+  
+})(jQuery);

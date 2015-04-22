@@ -1,7 +1,7 @@
 var db = require('./database'),
     User = require('../models/user'),
     util = require('./util'),
-    _ = require('../public/js/underscore-min');
+    _ = require('../public/js/lib/lodash');
 
 function set(app) {
   app.get('/admin', function(req, res) {

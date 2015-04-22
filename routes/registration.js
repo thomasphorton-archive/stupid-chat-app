@@ -5,7 +5,7 @@ var crypto = require('crypto'),
     passport = require('passport'),
     mandrill = require('mandrill-api/mandrill'),
     mandrill_client = new mandrill.Mandrill(config.mandrill_api_key),
-    _ = require('../public/js/underscore-min');
+    _ = require('../public/js/lib/lodash');
 
 function set(app, db) {
 
