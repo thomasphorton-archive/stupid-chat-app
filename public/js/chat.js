@@ -34,90 +34,51 @@ $(function() {
 
   socket.on('message', function (data) {
 
-    if(data.message) {
-
+    if (data.message) {
       clearInterval(titleInterval);
-
-      if(document.hasFocus()) {
-
+      if (document.hasFocus()) {
       } else {
-
         var i = 0;
-
         chat.unreadMessages++;
-
         titleInterval = setInterval( function() {
-
           if (i % 2 === 0) {
             document.title = '(' + chat.unreadMessages + ') ' + channel + ' - Chat With Friends';
           } else {
             document.title = channel + ' - Chat With Friends';
           }
-
           i++;
-
         }, 500);
-
       }
 
       if (data.type === 'image') {
-
         if (chat.safe_for_work_mode) {
-
           $chat.append(linkTemplate({data: data}));
-
         } else {
-
           $chat.append(imageTemplate({data: data}));
-
         }
-
       } else if (data.type === 'video') {
-
         if (chat.safe_for_work_mode) {
-
           $chat.append(linkTemplate({data: data}));
-
         } else {
-
           $chat.append(videoTemplate({data: data}));
-
         }
-
       } else if (data.type === 'link') {
-
         $chat.append(linkTemplate({data: data}));
-
       } else {
-
         $chat.append(messageTemplate({data: data}));
-
       }
-
       $chat.scrollTop($chat[0].scrollHeight);
-
     } else {
-
       console.log("There is a problem:", data);
-
     }
-
   });
 
   socket.on('popular', function(channels) {
-
-    // console.log(channels);
-
     var popularChannels = $('.popular-channels');
-
     popularChannels.html("");
-
     _.each(channels, function(data) {
-
       var name = data.channel;
-
       channelID = data.channel.toLowerCase();
-
       if (channelID == "public chat") {
         channelID = "";
         url = "/";
@@ -132,26 +93,17 @@ $(function() {
       }
 
       popularChannels.append(_.template(popularTemplate({channel: obj})));
-
     });
   });
 
   socket.on('update_users', function(data) {
-
     var text;
-
     if (data === 1) {
-
       text = '1 user';
-
     } else {
-
       text = data + ' users';
-
     }
-
     $('.users-online').text(text);
-
   });
 
   post_message.click(function() {

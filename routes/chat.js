@@ -4,7 +4,6 @@ var db = require('./database'),
     _ = require('../public/js/underscore-min');
 
 function set(app) {
-
   app.get("/c/:channel", function(req, res){
     render_chat(req, res);
   });
@@ -12,7 +11,6 @@ function set(app) {
   app.get("/c/", function(req, res) {
     render_chat(req, res);
   });
-
 }
 
 function init(io) {
