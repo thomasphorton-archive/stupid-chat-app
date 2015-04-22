@@ -1,44 +1,38 @@
 <% if (typeof success !== 'undefined' && success != '' && success != null) { %>
-
-<div class="container">
-  <div class="row">
-    <div class="col-md-12">
-      <div class="alert alert-success alert-dismissable">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-        <%- success %>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="alert alert-success alert-dismissable">
+          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+          <%- success %>
+        </div>
       </div>
     </div>
   </div>
-</div>
-
 <% } %>
 
 <% if (typeof error !== 'undefined' && error != '' && error != null) { %>
-
-<div class="container">
-  <div class="row">
-    <div class="col-md-12">
-      <div class="alert alert-danger alert-dismissable">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-        <%- error %>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="alert alert-danger alert-dismissable">
+          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+          <%- error %>
+        </div>
       </div>
     </div>
   </div>
-</div>
-
 <% } %>
 
 <% if (typeof warning !== 'undefined' && warning != '' && warning != null) { %>
-
-<div class="container">
-  <div class="row">
-    <div class="col-md-12">
-      <div class="alert alert-warning alert-dismissable">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-        <%- warning %>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="alert alert-warning alert-dismissable">
+          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+          <%- warning %>
+        </div>
       </div>
     </div>
   </div>
-</div>
-
 <% } %>

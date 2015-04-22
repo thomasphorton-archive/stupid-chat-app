@@ -1,3 +1,4 @@
+var environment = require('../config/environment.json');
 var db = require('./database'),
     moment = require('moment'),
     Message = require('../models/message.js');
@@ -26,7 +27,7 @@ function init(io) {
       }
       socket.join(channel);
 
-      if (channel === "") channel = "Public Chat";
+      if (channel === "") channel = environment.default_channel;
 
       // Find messages in current channel, sorted by timestamp.
       Message.find({channel: channel}, "timestamp", function (err, result) {
@@ -58,7 +59,7 @@ function init(io) {
     });
 
     socket.on('send', function (data) {
-      var channel = data.channel || "Public Chat",
+      var channel = data.channel || environment.default_channel,
           now = moment().unix();
 
       io.sockets.in(channel).emit('message', data);
@@ -89,7 +90,7 @@ function render_chat(req, res) {
   if (req.params.channel) {
     channel = req.params.channel.toLowerCase();
   } else {
-    channel = 'Public Chat';
+    channel = environment.default_channel;
   }
 
   if (req.query.guest === 'true') {
@@ -101,11 +102,12 @@ function render_chat(req, res) {
     if (user.status === 0) {
 
       // registered but unverified
-      warning = "<p><b>Hey!</b> You haven't verified your account yet! <a href='/u' class='alert-link'>Verify your acccount in the control panel</a></p>";
+      warning = '<p><b>Hey!</b> You haven\'t verified your account yet! <a href="/u" class="alert-link">Verify your acccount in the control panel</a></p>';
     }
   }
 
-  res.render("chat", {
+  res.render('chat', {
+    env: environment,
     channel: channel,
     user: user,
     warning: warning

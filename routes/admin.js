@@ -1,3 +1,4 @@
+var environment = require('../config/environment.json');
 var db = require('./database'),
     User = require('../models/user'),
     util = require('./util'),
@@ -7,6 +8,7 @@ function set(app) {
   app.get('/admin', function(req, res) {
     get_users(function(users) {
       res.render('admin', {
+        env: environment,
         users: users
       });
     });

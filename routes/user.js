@@ -1,3 +1,4 @@
+var environment = require('../config/environment.json');
 var util = require('./util');
 
 module.exports.set = function(app) {
@@ -7,6 +8,7 @@ module.exports.set = function(app) {
         warning = null;
 
     res.render("user", {
+      env: environment,
       user: user,
       warning: warning
     });

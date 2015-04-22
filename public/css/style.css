@@ -41,9 +41,9 @@ footer {
 }
 
 @media
-    only screen and (max-device-width: 1136px) and (min-device-width: 960px) and (max-device-height: 640px) and (min-device-height: 560px),
-    only screen and (max-device-height: 1136px) and (min-device-height: 960px) and (max-device-width: 640px) and (min-device-width: 560px) {
-    #content {
-      height: 300px;
-    }
+  only screen and (max-device-width: 1136px) and (min-device-width: 960px) and (max-device-height: 640px) and (min-device-height: 560px),
+  only screen and (max-device-height: 1136px) and (min-device-height: 960px) and (max-device-width: 640px) and (min-device-width: 560px) {
+  #content {
+    height: 300px;
+  }
 }
