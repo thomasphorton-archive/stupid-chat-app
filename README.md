@@ -3,7 +3,6 @@ chat
 
 # Before developing
 ## Extras
-* Install [Heroku toolbelt](https://toolbelt.heroku.com/)
 * Install [Postgress.app](http://postgresapp.com/)
 * Run Postgress.app
 
@@ -13,8 +12,8 @@ chat
 * `npm install`
 * `cp ./config/development.json.example ./config/development.json`
 * Edit `./development.json`
-* `node schema-build.js`
-* `node app.js`
+* `node schema-build`
+* `node app`
 
 TODO:
 Check out issues for ideas.
@@ -23,6 +22,7 @@ Build test harness.
 
 # Troubleshooting
 * `Error: Could not locate the bindings file. Tried:`
+  - seems to be an issue with a bad node.js version
   - install [nvm](https://github.com/creationix/nvm)
   - `nvm install v0.10.26`
   - `npm install`

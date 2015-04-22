@@ -20,7 +20,8 @@
     "passport": "~0.1.18",
     "passport-local": "~0.1.6",
     "pg": "2.x",
-    "socket.io": "*"
+    "socket.io": "*",
+    "minimist": "^1.1.1"
   },
   "engines": {
     "node": "0.10.x"

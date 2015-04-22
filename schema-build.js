@@ -1,4 +1,4 @@
-var config = require('./config/development.json');
+var config = require('./config/config');
 var pg = require('pg');
 
 var client = new pg.Client(config.database_connection_string);
